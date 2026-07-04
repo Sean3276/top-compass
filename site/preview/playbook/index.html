@@ -138,7 +138,7 @@ freedom differ.</div>
   <tr><td>Part 3 — BCA internal sub-clearance cards (PTO, Green Mark, B-score, shelters, CONQUAS, accessibility, structural closeout)</td></tr>
   <tr><td>Part 4 — TOP application week: booking, forms, inspection, express options</td></tr>
   <tr><td>Part 5 — After TOP: written directions, the 2-year window, and the road to CSC</td></tr>
-  <tr><td>Part 6 — The programme &amp; tracker: backward-planned from your TOP or CSC date, durations adjustable, self-saving</td></tr>
+  <tr><td>Part 6 — The programme &amp; tracker: project-type aware, backward-planned from your TOP or CSC date, durations adjustable, self-saving</td></tr>
   <tr><td>Part 7 — Forms &amp; fees index · waivers quick reference</td></tr>
   <tr><td>Part 8 — Project-type variations &amp; data centre supplement</td></tr>
   <tr><td>Appendix — Verification notes, gaps &amp; change log</td></tr>
@@ -303,9 +303,13 @@ the 2-year window leaves less slack than it appears once one WD cycle slips.</p>
 
 <section>
 <h2>Part 6 — The programme &amp; tracker</h2>
-<p class="lead">This is the working tool. Anchor the programme on your target <b>TOP
-inspection date</b> — or on your target <b>CSC date</b>, and it derives the TOP date from an
-adjustable TOP→CSC allowance — and every milestone below dates itself backward from
+<p class="lead">This is the working tool. Pick your <b>project type</b> and the programme
+adapts — landed drops the BCA inspection entirely (self-certification since Dec 2020) and
+sheds CONQUAS, lifts and B-score; industrial adds the JTC lessor layer and MOM WSH
+registration; data centres add the grid-connection critical path, EMA licensing, diesel
+storage, clean-agent CoCs and cooling-tower regimes. Anchor the programme on your target
+<b>TOP inspection date</b> — or on your target <b>CSC date</b>, and it derives the TOP date
+from an adjustable TOP→CSC allowance — and every milestone dates itself backward from
 completion. Every lead time is editable (days relative to T0, negative = before); section
 headers show how long each phase spans. Status and notes save automatically in this browser
 (nothing is uploaded anywhere); use Export to move a project between machines or to back it
@@ -315,6 +319,14 @@ up. Print for site meetings — the dated programme prints as shown.</p>
   <div class="no-print" style="display:flex;flex-wrap:wrap;gap:0.8em;align-items:center">
     <label for="projName">Project:</label>
     <input type="text" id="projName" placeholder="Project name" style="width:12em">
+    <label for="projType">Type:</label>
+    <select id="projType">
+      <option value="res">Non-landed residential (condo/EC)</option>
+      <option value="landed">Landed, owner-occupied</option>
+      <option value="com">Commercial / office / retail</option>
+      <option value="ind">Industrial (JTC land)</option>
+      <option value="dc">Data centre</option>
+    </select>
     <label for="anchorType">Anchor:</label>
     <select id="anchorType">
       <option value="top">Target TOP inspection date (T0)</option>
@@ -446,45 +458,66 @@ review.</p>
 
 </div>
 <script>
+var TYPES = [
+  ["res",    "Non-landed residential (condo/EC)"],
+  ["landed", "Landed, owner-occupied"],
+  ["com",    "Commercial / office / retail"],
+  ["ind",    "Industrial (JTC land)"],
+  ["dc",     "Data centre"]
+];
+var ALL = ["res", "com", "ind", "dc"]; // landed opts in explicitly per item
 var SECTIONS = [
-  { name: "Nine to six months out — the items you cannot compress", items: [
-    { id: "ri",        off: -270, label: "Appoint RI(A)/RI(M&E); Form FSC 8 within 14 days", basis: "SLA" },
-    { id: "liftplan",  off: -270, label: "Lift fixed-installation plan approval confirmed", basis: "TYP" },
-    { id: "copifbook", off: -245, label: "Book IMDA COPIF joint inspection", basis: "STD" },
-    { id: "copif",     off: -185, label: "COPIF: telecom facilities ready, joint inspection COMPLETE (≥ 6 months pre-TOP — hard)", basis: "STD" },
-    { id: "substn",    off: -160, label: "Substation building handover to SP PowerGrid (10 wks pre-energisation)", basis: "STD" },
-    { id: "uraaudit",  off: -150, label: "URA deviation audit; waivers filed / rectification planned", basis: "TYP" }
+  { name: "Long-lead items you cannot compress", items: [
+    { id: "cca",       off: -720, label: "Consumer Connection Agreement signed with SP (66 kV+: ~21\u201326 months to energisation \u2014 the real critical path)", basis: "STD", t: ["dc"] },
+    { id: "ri",        off: -270, label: "Appoint RI(A)/RI(M&E); Form FSC 8 within 14 days", basis: "SLA", t: ALL },
+    { id: "liftplan",  off: -270, label: "Lift fixed-installation plan approval confirmed", basis: "TYP", t: ALL },
+    { id: "copifbook", off: -245, label: "Book IMDA COPIF joint inspection", basis: "STD", t: ALL },
+    { id: "copif",     off: -185, label: "COPIF: telecom facilities ready, joint inspection COMPLETE (\u2265 6 months pre-TOP \u2014 hard)", basis: "STD", t: ALL },
+    { id: "substn",    off: -160, label: "Substation building handover to SP PowerGrid (10 wks pre-energisation)", basis: "STD", t: ALL },
+    { id: "uraaudit",  off: -150, label: "URA deviation audit; waivers filed / rectification planned", basis: "TYP", t: ALL.concat(["landed"]) },
+    { id: "coc",       off: -120, label: "Clean-agent suppression CoC dossier compiled (Fire Code Cl. 6.5.2 relief for data halls)", basis: "TYP", t: ["dc"] },
+    { id: "jtc1",      off: -120, label: "JTC lessor: plan endorsements confirmed; building-agreement completion milestones checked", basis: "TYP", t: ["ind", "dc"] }
   ]},
-  { name: "Six to three months out — energise and start the clocks", items: [
-    { id: "switchbd",  off: -135, label: "Switchboard ready; SP service cable works begin (covers 6-week tail)", basis: "STD" },
-    { id: "lewbook",   off: -110, label: "LEW books energisation (14 business days lead; COC ready)", basis: "STD" },
-    { id: "water",     off: -100, label: "Water service work complete; LP certifies within 7 days", basis: "STD" },
-    { id: "energise",  off: -90,  label: "PERMANENT POWER ENERGISED; WATER TURNED ON", basis: "TYP" },
-    { id: "firetc",    off: -90,  label: "Fire protection T&C window opens (runs to ~T−60)", basis: "TYP" },
-    { id: "liftcomm",  off: -90,  label: "Lift commissioning + acceptance tests, QP/SPE physically present (runs to ~T−45)", basis: "SLA" },
-    { id: "conqbook",  off: -75,  label: "Book CONQUAS/QM assessments (weekly Tue–Wed window)", basis: "STD" },
-    { id: "bscore",    off: -65,  label: "Submit as-built B-score/C-score (~2 months before the T−5 application)", basis: "STD" },
-    { id: "mssl",      off: -60,  label: "MSSL unit inspections begin; waterponding method statement in", basis: "STD" }
+  { name: "Energise and start the clocks", items: [
+    { id: "switchbd",  off: -135, label: "Switchboard ready; SP service cable works begin (covers 6-week tail)", basis: "STD", t: ALL },
+    { id: "lewbook",   off: -110, label: "LEW books energisation (14 business days lead; COC ready)", basis: "STD", t: ALL },
+    { id: "water",     off: -100, label: "Water service work complete; LP certifies within 7 days", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "energise",  off: -90,  label: "PERMANENT POWER ENERGISED; WATER TURNED ON", basis: "TYP", t: ALL.concat(["landed"]) },
+    { id: "firetc",    off: -90,  label: "Fire protection T&C window opens (runs to ~T\u221260)", basis: "TYP", t: ALL },
+    { id: "liftcomm",  off: -90,  label: "Lift commissioning + acceptance tests, QP/SPE physically present (runs to ~T\u221245)", basis: "SLA", t: ALL },
+    { id: "conqbook",  off: -75,  label: "Book CONQUAS/QM assessments (weekly Tue\u2013Wed window)", basis: "STD", t: ["res"] },
+    { id: "bscore",    off: -65,  label: "Submit as-built B-score/C-score (~2 months before the T\u22125 application; \u22655,000 m\u00b2 GFA)", basis: "STD", t: ALL },
+    { id: "mssl",      off: -60,  label: "MSSL unit inspections begin (>10 units); waterponding method statement in", basis: "STD", t: ["res"] },
+    { id: "pfm",       off: -60,  label: "SCDF P&FM diesel-storage licence application (~19 wd incl. site inspection)", basis: "STD", t: ["dc"] },
+    { id: "cool",      off: -50,  label: "NEA cooling-tower registration; Legionella testing regime commences", basis: "STD", t: ["dc"] }
   ]},
-  { name: "The last two months — clearances in parallel", items: [
-    { id: "riinsp",    off: -50,  label: "RI inspections; Form 1/2 + report issued", basis: "TYP" },
-    { id: "pub",       off: -45,  label: "Apply PUB clearances (3 streams, 14 wd)", basis: "STD" },
-    { id: "neaura",    off: -40,  label: "Apply NEA + URA clearances; book CD shelter commissioning", basis: "STD" },
-    { id: "scdf",      off: -30,  label: "Apply SCDF TFP/FSC; shelters commissioned; GM as-built lodged (GM lodgement: statutory)", basis: "STD" },
-    { id: "pto",       off: -21,  label: "Apply lift PTOs on LEAP (7 wd)", basis: "STD" },
-    { id: "inspreq",   off: -21,  label: "Request TOP inspection date on the portal", basis: "TYP" },
-    { id: "conqdone",  off: -14,  label: "CONQUAS complete; accessibility complete; site-condition walkthrough", basis: "STD" },
-    { id: "tfp",       off: -7,   label: "TFP + all lift PTOs in hand", basis: "TYP" },
-    { id: "forms",     off: -5,   label: "Lodge CSPBW + QP Declaration + builder/lightning/ACMV certificates", basis: "STD" },
-    { id: "t0",        off: 0,    label: "BCA TOP INSPECTION (T0 — anchor, fixed)", basis: "", locked: true }
+  { name: "The last two months \u2014 clearances in parallel", items: [
+    { id: "riinsp",    off: -50,  label: "RI inspections; Form 1/2 + report issued", basis: "TYP", t: ALL },
+    { id: "ist",       off: -45,  label: "Level-5 Integrated Systems Testing window (competes with statutory inspections for the commissioned plant)", basis: "TYP", t: ["dc"] },
+    { id: "pub",       off: -45,  label: "Apply PUB clearances (3 streams, 14 wd)", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "neaura",    off: -40,  label: "Apply NEA + URA clearances", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "shelter",   off: -40,  label: "Book CD shelter commissioning (\u22655 wd ahead); commission ~T\u221230; failed runs re-apply \u226514 wd ahead", basis: "STD", t: ["res", "landed"] },
+    { id: "eilic",     off: -40,  label: "EMA electrical installation licence in place (>45 kVA approved load)", basis: "STD", t: ["dc"] },
+    { id: "scdf",      off: -30,  label: "Apply SCDF TFP/FSC; GM as-built lodged (GM lodgement: statutory, \u22652,000 m\u00b2)", basis: "STD", t: ALL,
+      labelBy: { landed: "Confirm SCDF clearance scope with QP (many landed dwellings have no FSC-level fire works); GM only if \u22652,000 m\u00b2" } },
+    { id: "pto",       off: -21,  label: "Apply lift PTOs on LEAP (7 wd)", basis: "STD", t: ALL },
+    { id: "inspreq",   off: -21,  label: "Request TOP inspection date on the portal", basis: "TYP", t: ALL },
+    { id: "conqdone",  off: -14,  label: "CONQUAS complete; accessibility complete; site-condition walkthrough", basis: "STD", t: ["res"] },
+    { id: "tfp",       off: -7,   label: "TFP + all lift PTOs in hand", basis: "TYP", t: ALL },
+    { id: "forms",     off: -5,   label: "Lodge CSPBW + QP Declaration + builder/lightning/ACMV certificates", basis: "STD", t: ALL.concat(["landed"]),
+      labelBy: { landed: "Prepare QP self-inspection checklist + household shelter commissioning video" } },
+    { id: "t0",        off: 0,    label: "BCA TOP INSPECTION (T0 \u2014 anchor, fixed)", basis: "", locked: true, t: ALL.concat(["landed"]),
+      labelBy: { landed: "TOP/CSC application submitted \u2014 QP self-certification, no BCA site inspection (APPBCA-2020-08)" } }
   ]},
-  { name: "After TOP — the CSC clock is running", items: [
-    { id: "topgrant",  off: 10,   label: "TOP issued (7 wd processing; typical ~4 weeks if rectification intervenes)", basis: "STD" },
-    { id: "wd",        off: 90,   label: "Written-direction compliance complete (60 wd envelope; BP 40/20 wd; ST 14 calendar days)", basis: "STD" },
-    { id: "fsc",       off: 180,  label: "FSC obtained (close TFP items before TFP expiry ~6 months)", basis: "STD" },
-    { id: "cscclear",  off: 365,  label: "LTA + NParks clearances, survey plans, PUB compliance certificates in progress", basis: "STD" },
-    { id: "cscapp",    off: 540,  label: "Target CSC application (7 wd processing) — synced with the TOP→CSC allowance when anchored on CSC", basis: "STD" },
-    { id: "cscwin",    off: 740,  label: "ALLOWABLE WINDOW (IACC advisory): CSC ≤ 2 years after TOP issue — computed from the TOP-issued row", basis: "STD", computed: true }
+  { name: "After TOP \u2014 the CSC clock is running", items: [
+    { id: "topgrant",  off: 10,   label: "TOP issued (7 wd processing; typical ~4 weeks if rectification intervenes)", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "jtc2",      off: 14,   label: "Return TOP/FSC documents to JTC (within 14 working days of issue)", basis: "TYP", t: ["ind", "dc"] },
+    { id: "mom",       off: 30,   label: "MOM WSH registration before starting factory operations", basis: "SLA", t: ["ind"] },
+    { id: "wd",        off: 90,   label: "Written-direction compliance complete (60 wd envelope; BP 40/20 wd; ST 14 calendar days)", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "fsc",       off: 180,  label: "FSC obtained (close TFP items before TFP expiry ~6 months)", basis: "STD", t: ALL },
+    { id: "cscclear",  off: 365,  label: "LTA + NParks clearances, survey plans, PUB compliance certificates in progress", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "cscapp",    off: 540,  label: "Target CSC application (7 wd processing) \u2014 synced with the TOP\u2192CSC allowance when anchored on CSC", basis: "STD", t: ALL.concat(["landed"]) },
+    { id: "cscwin",    off: 740,  label: "ALLOWABLE WINDOW (IACC advisory): CSC \u2264 2 years after TOP issue \u2014 computed from the TOP-issued row", basis: "STD", computed: true, t: ALL.concat(["landed"]) }
   ]}
 ];
 
@@ -501,7 +534,7 @@ function allItems() {
 function defaultState() {
   var offsets = {};
   allItems().forEach(function (it) { offsets[it.id] = it.off; });
-  return { projName: "", anchorType: "top", anchorDate: "", cscGap: 540,
+  return { projName: "", projType: "res", anchorType: "top", anchorDate: "", cscGap: 540,
            offsets: offsets, status: {}, notes: {} };
 }
 function clampInt(v, lo, hi, fallback) {
@@ -514,6 +547,7 @@ function sanitize(raw) {
   var s = defaultState();
   if (!raw || typeof raw !== "object") return s;
   if (typeof raw.projName === "string") s.projName = raw.projName.slice(0, 120);
+  if (TYPES.some(function (t) { return t[0] === raw.projType; })) s.projType = raw.projType;
   s.anchorType = raw.anchorType === "csc" ? "csc" : "top";
   if (typeof raw.anchorDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.anchorDate)) {
     var p = raw.anchorDate.split("-").map(Number);
@@ -561,6 +595,8 @@ function showSaveWarn(on) {
   if (on) w.textContent = "Warning: this browser is not persisting your changes (private " +
     "mode or storage blocked). Your edits work for this session only — use Export before closing.";
 }
+function visible(it) { return it.t.indexOf(state.projType) >= 0; }
+function lbl(it) { return (it.labelBy && it.labelBy[state.projType]) || it.label; }
 function effOffset(it) {
   if (it.computed) return state.offsets.topgrant + 730;
   return state.offsets[it.id];
@@ -588,10 +624,14 @@ function render() {
   document.getElementById("anchorDate").value = state.anchorDate;
   document.getElementById("cscGap").value = state.cscGap;
   document.getElementById("projName").value = state.projName;
+  document.getElementById("projType").value = state.projType;
   document.getElementById("gapWrap").hidden = state.anchorType !== "csc";
   var t0 = t0Date();
   var info = document.getElementById("anchorInfo");
-  var proj = state.projName ? "<b>" + escAttr(state.projName) + "</b> — " : "";
+  var typeName = "";
+  TYPES.forEach(function (t) { if (t[0] === state.projType) typeName = t[1]; });
+  var proj = (state.projName ? "<b>" + escAttr(state.projName) + "</b> · " : "") +
+    typeName + " — ";
   if (!t0) {
     info.innerHTML = proj + "Enter an anchor date to generate the dated programme. " +
       "Lead times, statuses and notes still save.";
@@ -614,11 +654,13 @@ function render() {
     "<th style=\"width:9em\">Date</th><th>Milestone</th><th style=\"width:3.5em\">Basis</th>" +
     "<th style=\"width:8.5em\">Status</th><th style=\"width:16%\">Notes</th></tr></thead><tbody>";
   SECTIONS.forEach(function (sec) {
-    var offs = sec.items.map(effOffset);
+    var items = sec.items.filter(visible);
+    if (!items.length) return;
+    var offs = items.map(effOffset);
     var lo = Math.min.apply(null, offs), hi = Math.max.apply(null, offs);
     h += "<tr class=\"hdr\"><td colspan=\"6\">" + sec.name + " — spans " + (hi - lo) +
       " days (" + offLabel(lo) + " → " + offLabel(hi) + ")</td></tr>";
-    sec.items.forEach(function (it) {
+    items.forEach(function (it) {
       var off = effOffset(it);
       var st = state.status[it.id] || "Not started";
       var d = t0 ? addDays(t0, off) : null;
@@ -628,7 +670,7 @@ function render() {
         "<input type=\"number\" id=\"off-" + it.id + "\" value=\"" + off + "\" style=\"width:4.5em\" " +
         "onchange=\"setOffset('" + it.id + "', this)\">") + "</td>";
       h += "<td class=\"date\">" + (d ? fmt(d) : "—") + "</td>";
-      h += "<td>" + it.label + (overdue ? " — <b>past due</b>" : "") + "</td>";
+      h += "<td>" + lbl(it) + (overdue ? " — <b>past due</b>" : "") + "</td>";
       h += "<td>" + (it.basis ? "<span class=\"b " + it.basis.toLowerCase() + "\">" + it.basis + "</span>" : "") + "</td>";
       h += "<td><select id=\"st-" + it.id + "\" onchange=\"setStatus('" + it.id + "', this.value)\">" +
         STATUSES.map(function (s) { return "<option" + (s === st ? " selected" : "") + ">" + s + "</option>"; }).join("") +
@@ -721,6 +763,9 @@ document.getElementById("cscGap").addEventListener("change", function () {
 });
 document.getElementById("projName").addEventListener("change", function () {
   state.projName = this.value.slice(0, 120); save(); render();
+});
+document.getElementById("projType").addEventListener("change", function () {
+  state.projType = this.value; save(); render();
 });
 try { render(); }
 catch (e) { state = defaultState(); render(); }
