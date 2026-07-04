@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DC TOP Tracker — TOP Compass Pro</title>
+<style>
+:root {
+  --bg: #f4f7f8; --panel: #ffffff; --ink: #16232b; --soft: #55656e;
+  --accent: #0e5a6e; --accent-soft: #eaf3f5; --line: #d4dfe3;
+  --red: #b3401f; --red-bg: #fbeae3; --amber: #8a6d0e; --amber-bg: #faf3d9;
+  --green: #2e6b34; --green-bg: #e7f3e7; --hard: #7a1f3d;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5; }
+header.app { background: var(--accent); color: #fff; padding: 10px 18px;
+  display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+header.app .brand { font-weight: 700; font-size: 16px; }
+header.app .brand small { font-weight: 400; opacity: 0.8; margin-left: 8px; }
+header.app select, header.app button, header.app input {
+  font-size: 13px; padding: 5px 9px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.12); color: #fff; }
+header.app select option { color: var(--ink); }
+header.app button { cursor: pointer; }
+nav.tabs { display: flex; gap: 2px; background: var(--panel); border-bottom: 2px solid var(--line);
+  padding: 0 18px; overflow-x: auto; }
+nav.tabs button { border: 0; background: transparent; padding: 10px 16px; font-size: 14px;
+  cursor: pointer; color: var(--soft); border-bottom: 3px solid transparent; white-space: nowrap; }
+nav.tabs button.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+main { max-width: 1180px; margin: 0 auto; padding: 18px; }
+.grid { display: grid; gap: 14px; }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.panel h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--soft); }
+.big { font-size: 30px; font-weight: 700; line-height: 1.1; }
+.big small { font-size: 13px; font-weight: 400; color: var(--soft); display: block; }
+.rag { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; }
+.rag.red { background: var(--red); } .rag.amber { background: var(--amber); } .rag.green { background: var(--green); }
+.wsrow { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+.wsrow:last-child { border-bottom: 0; }
+.wsrow .pct { margin-left: auto; color: var(--soft); font-variant-numeric: tabular-nums; }
+.alert { border-radius: 8px; padding: 9px 12px; margin: 8px 0; font-size: 13.5px; border: 1px solid; }
+.alert.red { background: var(--red-bg); border-color: var(--red); }
+.alert.amber { background: var(--amber-bg); border-color: var(--amber); }
+.alert.info { background: var(--accent-soft); border-color: var(--accent); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: var(--accent-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+tr.overdue td { background: var(--red-bg); }
+tr.due td { background: var(--amber-bg); }
+tr.done td { background: var(--green-bg); }
+.b { font-size: 10px; font-weight: 700; border-radius: 3px; padding: 1px 5px; white-space: nowrap; }
+.b.sla { background: #e2eff3; color: var(--accent); }
+.b.std { background: #f5eed3; color: var(--amber); }
+.b.typ { background: #f7e5d2; color: #8a4a10; }
+.b.over { background: var(--red-bg); color: var(--red); border: 1px solid var(--red); }
+.b.duesoon { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber); }
+.b.hard { background: #f6dfe7; color: var(--hard); }
+details.ws { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; }
+details.ws > summary { padding: 11px 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+details.ws > summary .pct { margin-left: auto; font-weight: 400; color: var(--soft); }
+details.ws .inner { padding: 0 15px 13px; overflow-x: auto; }
+input.cell, td select { font-size: 12.5px; padding: 3px 5px; border: 1px solid var(--line); border-radius: 4px; width: 100%; background: #fff; color: var(--ink); }
+input.cell.num { width: 5em; }
+.docs label { display: flex; gap: 6px; font-size: 12px; padding: 1px 0; align-items: baseline; }
+.mnote { font-size: 12px; color: var(--soft); margin-top: 3px; }
+.tl { position: relative; margin: 6px 0 2px; }
+.tl .lane { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+.tl .lane .lbl { width: 130px; font-size: 12.5px; flex-shrink: 0; }
+.tl .track { position: relative; flex: 1; height: 18px; background: var(--accent-soft); border-radius: 4px; overflow: hidden; }
+.tl .bar { position: absolute; top: 3px; height: 12px; border-radius: 3px; background: var(--accent); opacity: 0.65; }
+.tl .dot { position: absolute; top: 2px; width: 8px; height: 14px; border-radius: 2px; transform: translateX(-50%); }
+.tl .dot.done { background: var(--green); }
+.tl .dot.todo { background: #90a8b1; }
+.tl .dot.late { background: var(--red); }
+.tl .dot.hardgate { outline: 2px solid var(--hard); }
+.tl .today { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--red); }
+.tl .axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--soft); margin-left: 140px; }
+.setupform { display: grid; gap: 10px; max-width: 460px; }
+.setupform label { font-weight: 600; font-size: 13px; }
+.setupform input { display: block; width: 100%; margin-top: 3px; padding: 7px 9px; font-size: 14px;
+  border: 1px solid var(--line); border-radius: 6px; }
+button.primary { background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+  padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+button.ghost { background: #fff; color: var(--accent); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 7px 14px; font-size: 13px; cursor: pointer; }
+footer.app { max-width: 1180px; margin: 10px auto 30px; padding: 0 18px; font-size: 12px; color: var(--soft); }
+@media print {
+  header.app, nav.tabs, .noprint, footer.app { display: none !important; }
+  body { background: #fff; font-size: 11px; }
+  .panel, details.ws { border: 1px solid #999; break-inside: avoid; }
+  details.ws:not([open]) { display: block; } /* content still hidden; report view is the print surface */
+  th, tr.overdue td, tr.due td, tr.done td, .b, .rag, .alert { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="noprint" style="background:#7a1f3d;color:#fff;padding:8px 12px;font-size:12px;text-align:center">EVALUATION PREVIEW — unlisted copy for the publisher's own review. Not licensed for use or distribution.</div>
+<header class="app">
+  <span class="brand">DC TOP Tracker<small>TOP Compass Pro · Part 1 (local-first) · dataset v2026.07</small></span>
+  <select id="projSel" onchange="switchProject(this.value)"></select>
+  <button onclick="newProject()">+ New project</button>
+  <button onclick="renameProject()">Rename</button>
+  <button onclick="deleteProject()">Delete</button>
+  <button onclick="exportProject()">Export</button>
+  <button onclick="exportAll()">Export all</button>
+  <button onclick="exportIcs()">Calendar (.ics)</button>
+  <button onclick="document.getElementById('impFile').click()">Import</button>
+  <input type="file" id="impFile" accept=".json" hidden onchange="importProject(this)">
+</header>
+<nav class="tabs" id="tabs"></nav>
+<main id="view"></main>
+<div id="saveWarn" class="alert red" hidden
+  style="position:fixed;bottom:0;left:0;right:0;z-index:60;margin:0;border-radius:0"></div>
+<footer class="app">
+  <p>Data stays in this browser (localStorage) — nothing is uploaded. Export regularly.
+  Lead-time bases: <span class="b sla">SLA</span> statutory · <span class="b std">STD</span> agency
+  standard · <span class="b typ">TYP</span> planning estimate (confirm per project) ·
+  <span class="b hard">HARD GATE</span> immovable external constraint. Regulatory content
+  verified July 2026; not professional advice — the appointed QP's statutory duties are theirs.
+  Part 2 (accounts, team sync, alerts) swaps the storage adapter; your exported data carries over.</p>
+</footer>
+<script>
+"use strict";
+var DATASET_VERSION = "2026.07";
+/* ================= catalog: DC completion domain model ================= */
+var WORKSTREAMS = [
+  { id: "pwr", name: "Power chain" },
+  { id: "fire", name: "Fire safety" },
+  { id: "wtr", name: "Water & cooling" },
+  { id: "tel", name: "Telecoms / COPIF" },
+  { id: "bca", name: "BCA statutory" },
+  { id: "gm", name: "Green Mark / CFA / DIA" },
+  { id: "jtc", name: "JTC / lessor" },
+  { id: "cx", name: "Commissioning" },
+  { id: "csc", name: "Post-TOP → CSC" }
+];
+var CATALOG = [
+  { id:"cca", ws:"pwr", off:-885, basis:"STD", hard:true, agency:"SP PowerGrid / EMA",
+    label:"Consumer Connection Agreement signed (66 kV+)",
+    info:"SP-published lead: ~21 months (66 kV, existing substation) to ~26 months (new consumer substation) from CCA to energisation. Default sits mid-band for a new consumer substation; T−730 vs energisation at T−90 is the absolute floor. This is the programme's true critical path.",
+    docs:["CCA executed copy","PSO-endorsed connection proposal","Connection charges paid"] },
+  { id:"gensetlic", ws:"pwr", off:-180, basis:"STD", agency:"EMA",
+    label:"Genset licensing determination: exempt (islanded standby) vs wholesaler (1–10 MW parallel) vs generation licence (≥10 MW)",
+    info:"Grid-synchronised or demand-response/interruptible-load participation requires a wholesaler licence — decide and evidence before commissioning.",
+    docs:["Licensing determination memo","Licence or exemption basis"] },
+  { id:"substn", ws:"pwr", off:-335, basis:"STD", hard:true, agency:"SP PowerGrid",
+    label:"Substation building handed over to SPPG",
+    info:"SP requires the consumer substation handed over 8 months before target energisation for 66 kV connections (6 months for 22 kV).",
+    docs:["Handover acceptance from SPPG"] },
+  { id:"switchbd", ws:"pwr", off:-135, basis:"STD", agency:"SP / LEW",
+    label:"Switchboards & cable entries ready; service cable works begin",
+    info:"SP standard: supply available 4–6 weeks from readiness — this offset covers the 6-week tail.", docs:[] },
+  { id:"retailer", ws:"pwr", off:-120, basis:"TYP", agency:"Retailer / EMC",
+    label:"Electricity retail/wholesale supply arrangements in place for turn-on", docs:[] },
+  { id:"lewbook", ws:"pwr", off:-110, basis:"STD", agency:"SP / LEW",
+    label:"LEW books energisation (14 business days lead)",
+    docs:["LEW Certificate of Compliance","Certificate of Readiness"] },
+  { id:"eilic", ws:"pwr", off:-105, basis:"STD", agency:"EMA",
+    label:"EMA electrical installation licence in force at turn-on (>45 kVA; LEW applies via ELISE)",
+    docs:["EI licence","LEW appointment of correct class"] },
+  { id:"energise", ws:"pwr", off:-90, basis:"TYP", hard:true, agency:"SP",
+    label:"PERMANENT POWER ENERGISED",
+    info:"Gates fire T&C, lift commissioning, IST — everything downstream.", docs:["SP inspection PASS report"] },
+
+  { id:"cocreg", ws:"fire", off:-300, basis:"TYP", agency:"SCDF",
+    label:"Regulated fire product CoC register opened at procurement",
+    info:"Clean-agent hardware, dampers, doors, cables all need Certificates of Conformity — missing CoCs surface at TFP stage, far too late.",
+    docs:["CoC register","Clean-agent system CoCs (Cl. 6.5.2 relief)"] },
+  { id:"riappt", ws:"fire", off:-270, basis:"SLA", agency:"SCDF",
+    label:"RI(A) + RI(M&E) appointed; Form FSC 8 filed within 14 days",
+    docs:["Form FSC 8 acknowledgement"] },
+  { id:"pfmapp", ws:"fire", off:-120, basis:"STD", agency:"SCDF",
+    label:"P&FM diesel-storage licence application — before first bulk fuel delivery",
+    info:"~19 working days processing including site inspection; 110% bunding; licence up to 3 years. The licence must be in force before licensable quantities arrive for genset commissioning.",
+    docs:["P&FM licence application","Bunding compliance evidence"] },
+  { id:"firetc", ws:"fire", off:-90, basis:"TYP", agency:"—",
+    label:"Fire protection T&C window opens (runs to ~T−60)",
+    info:"No published SG full-suite duration — component tests run days-to-weeks each; confirm with the fire contractor.", docs:[] },
+  { id:"riinsp", ws:"fire", off:-50, basis:"TYP", agency:"RI",
+    label:"RI inspections; Form 1/2 + inspection report issued",
+    docs:["RI Form 1 or Form 2","RI inspection report"] },
+  { id:"tfpapp", ws:"fire", off:-30, basis:"STD", agency:"SCDF",
+    label:"TFP/FSC application via CORENET (3 wd response; audit ~10 days)", docs:[] },
+  { id:"tfp", ws:"fire", off:-7, basis:"STD", hard:true, agency:"SCDF",
+    label:"TFP in hand (validity ≤6 months)",
+    info:"No TOP without TFP or FSC. TFP only where fire works are complete bar very minor items.",
+    docs:["TFP"] },
+  { id:"fsc", ws:"fire", off:176, basis:"STD", agency:"SCDF",
+    label:"FSC obtained — close TFP items inside TFP validity", docs:["FSC"] },
+  { id:"firecert", ws:"fire", off:210, basis:"SLA", agency:"SCDF",
+    label:"Fire Certificate application (FSA s.35) — recurring PE-inspection regime established",
+    info:"Mandatory for designated premises with regulated fire-safety systems; 36-month validity cycles from Apr 2026.",
+    docs:["FC application","PE inspection arrangement"] },
+
+  { id:"waterworks", ws:"wtr", off:-100, basis:"STD", agency:"PUB",
+    label:"Water service work complete; LP certifies within 7 days",
+    docs:["LP Certificate of Satisfactory Completion","PUB account opened"] },
+  { id:"tradeeff", ws:"wtr", off:-120, basis:"TYP", agency:"PUB",
+    label:"Trade effluent discharge approval for cooling-tower blowdown; NEWater/industrial water connection confirmed (where applicable)",
+    docs:["Trade effluent approval"] },
+  { id:"wateron", ws:"wtr", off:-90, basis:"TYP", hard:true, agency:"PUB",
+    label:"WATER TURNED ON (fire mains live)", docs:[] },
+  { id:"cooltower", ws:"wtr", off:-50, basis:"STD", agency:"NEA",
+    label:"Cooling towers registered; Legionella testing regime commences",
+    info:"Registrable aerosol-generating systems; monthly plate counts + quarterly Legionella tests, results to NEA.",
+    docs:["AGS registration","Water treatment programme"] },
+  { id:"pubclear", ws:"wtr", off:-45, basis:"STD", agency:"PUB",
+    label:"PUB clearances applied: sanitary · drainage · water (14 wd)",
+    docs:["COMPOFWORK","DRATOP + handing-over","Water certificate"] },
+  { id:"wemp", ws:"wtr", off:60, basis:"STD", agency:"PUB",
+    label:"Water Efficiency Management Plan regime (if ≥60,000 m³/yr)",
+    docs:["Private sub-meters installed","First WEMP submission planned"] },
+
+  { id:"copifbook", ws:"tel", off:-245, basis:"STD", agency:"IMDA",
+    label:"COPIF joint inspection booked with telecom licensees", docs:[] },
+  { id:"copif", ws:"tel", off:-185, basis:"STD", hard:true, agency:"IMDA",
+    label:"COPIF: facilities ready + joint inspection COMPLETE",
+    info:"COPIF requires telecom facilities ready/handed over no less than 6 months before TOP (≈183 days) — the earliest hard completion-stage deadline, enforced outside the TOP portal.",
+    docs:["Joint inspection record","MDF room / lead-ins acceptance"] },
+  { id:"carriers", ws:"tel", off:-120, basis:"TYP", agency:"Carriers",
+    label:"Carrier fit-out & cross-connect coordination", docs:[] },
+
+  { id:"liftplan", ws:"bca", off:-270, basis:"TYP", agency:"BCA",
+    label:"Lift fixed-installation plan approval (Cat A: min 15 wd + rounds)", docs:[] },
+  { id:"uraaudit", ws:"bca", off:-150, basis:"TYP", agency:"URA",
+    label:"URA deviation audit; waivers filed / rectification planned",
+    info:"There is no waiver-at-TOP — waivers are a design-stage tool.", docs:[] },
+  { id:"liftcomm", ws:"bca", off:-90, basis:"SLA", agency:"BCA",
+    label:"Lift commissioning + acceptance tests, QP/SPE physically present", docs:[] },
+  { id:"bscore", ws:"bca", off:-65, basis:"STD", agency:"BCA",
+    label:"As-built B-score/C-score submitted (~2 months before application)", docs:[] },
+  { id:"neaura", ws:"bca", off:-40, basis:"STD", agency:"NEA / URA",
+    label:"NEA + URA technical clearances applied",
+    info:"NEA's DC clearance tests the BP-condition carry-overs: genset stack height/dispersion as approved, emissions compliance, factory boundary noise.",
+    docs:["Genset stack as-built vs BP approval","Air emissions compliance evidence","Boundary noise assessment"] },
+  { id:"gmasbuilt", ws:"bca", off:-30, basis:"SLA", agency:"BCA",
+    label:"Green Mark as-built score lodged (statutory: before TOP application)", docs:["BPD_GM02 filing"] },
+  { id:"pto", ws:"bca", off:-21, basis:"STD", agency:"BCA",
+    label:"Lift PTOs applied on LEAP (7 wd)", docs:["QP fixed-installation certification"] },
+  { id:"inspreq", ws:"bca", off:-21, basis:"TYP", agency:"BCA",
+    label:"TOP inspection date requested (confirm 1 week before or it lapses)", docs:[] },
+  { id:"forms", ws:"bca", off:-5, basis:"STD", agency:"BCA",
+    label:"CSPBW + QP Declaration + builder/lightning/ACMV certificates lodged",
+    info:"Rule: not less than 3 days before inspection; T−5 guarantees ≥3 working days.",
+    docs:["CSPBW","QP Declaration","Builder's certificate","Lightning cert","ACMV cert"] },
+  { id:"t0", ws:"bca", off:0, basis:"", locked:true, agency:"BCA",
+    label:"BCA TOP INSPECTION (T0 — anchor)", docs:[] },
+  { id:"topgrant", ws:"bca", off:10, basis:"STD", agency:"BCA",
+    label:"TOP issued (7 wd; typical ~4 weeks if rectification intervenes)", docs:["TOP"] },
+
+  { id:"gmdc", ws:"gm", off:-120, basis:"TYP", agency:"BCA-IMDA",
+    label:"GM DC evidence pack: PUE modelling at 25/50/75/100% loads, WUE",
+    info:"GM DC 2024 Platinum ≈ PUE 1.25 at 100% IT load, measured after PDU; final energy proof runs on 12 months' operational data post-TOP.", docs:[] },
+  { id:"cfacond", ws:"gm", off:-60, basis:"TYP", agency:"IMDA/EDB",
+    label:"CFA award-condition evidence check (PUE, GM DC Platinum, green pathways)",
+    info:"CFA conditions are contractual award conditions — evidencing deadlines sit in the award letter, not public documents. Check yours.", docs:[] },
+  { id:"dia", ws:"gm", off:90, basis:"TYP", agency:"IMDA/MDDI",
+    label:"Digital Infrastructure Act readiness watch (licensing, PUE, resilience, incident reporting)",
+    info:"Bill in public consultation 1–22 Jul 2026; obligations for designated DC operators expected 2026–27. Track designation criteria against this facility.", docs:[] },
+
+  { id:"jtc1", ws:"jtc", off:-120, basis:"TYP", agency:"JTC",
+    label:"JTC plan endorsements + building-agreement completion deadline confirmed",
+    info:"Building agreements carry their own TOP deadlines tied to GPR/investment commitments — diarise the contractual date alongside the statutory programme.", docs:[] },
+  { id:"jtc2", ws:"jtc", off:14, basis:"TYP", agency:"JTC",
+    label:"TOP/FSC documents returned to JTC (within 14 working days)", docs:[] },
+
+  { id:"l14", ws:"cx", off:-75, basis:"TYP", agency:"Cx agent",
+    label:"Level 1–4 commissioning complete", docs:[] },
+  { id:"ist", ws:"cx", off:-45, basis:"TYP", agency:"Cx agent",
+    label:"Level-5 Integrated Systems Testing window",
+    info:"IST competes with statutory inspections for the same commissioned plant and permanent power — coordinate the calendars.", docs:["IST script","IST report"] },
+
+  { id:"wd", ws:"csc", off:90, basis:"STD", agency:"BCA/SCDF",
+    label:"Written-direction compliance (60 wd envelope; BP 40/20; ST 14 cd)", docs:[] },
+  { id:"ltanparks", ws:"csc", off:365, basis:"STD", agency:"LTA / NParks",
+    label:"LTA (20 wd) + NParks (7+7 wd) clearances; survey plans; PUB compliance certs", docs:[] },
+  { id:"cscapp", ws:"csc", off:540, basis:"STD", agency:"BCA",
+    label:"CSC application (7 wd)", docs:["CSC"] },
+  { id:"cscwin", ws:"csc", off:740, basis:"STD", computed:true, agency:"BCA",
+    label:"ALLOWABLE WINDOW: CSC ≤ 2 years after TOP issue (computed)", docs:[] }
+];
+var STATUSES = ["Not started", "In progress", "Done", "Blocked", "N/A"];
+
+/* ================= storage adapter (Part 2 swaps this for a backend) ================= */
+var store = {
+  KEY: "dctop-v1",
+  load: function () { try { return JSON.parse(localStorage.getItem(this.KEY) || "null"); } catch (e) { return null; } },
+  write: function (data) {
+    try { localStorage.setItem(this.KEY, JSON.stringify(data)); return true; } catch (e) { return false; }
+  }
+};
+
+/* ================= helpers ================= */
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
+function clampInt(v, lo, hi, fb) {
+  var n = Math.trunc(Number(v));
+  if (!Number.isFinite(n)) return fb;
+  return Math.min(hi, Math.max(lo, n));
+}
+function validDate(s) {
+  if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return "";
+  var p = s.split("-").map(Number);
+  var d = new Date(p[0], p[1] - 1, p[2]);
+  return (d.getFullYear() === p[0] && d.getMonth() === p[1] - 1 && d.getDate() === p[2]) ? s : "";
+}
+function docSlug(name) { return String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 28); }
+function catItem(id) { for (var i = 0; i < CATALOG.length; i++) if (CATALOG[i].id === id) return CATALOG[i]; return null; }
+function hasOwn(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+
+/* ================= state & sanitizers ================= */
+function blankProject(name) {
+  return { name: name || "Untitled DC project", mw: "", gfa: "", t0: "", cca: "",
+           ms: {}, baseline: null, createdAt: validToday() };
+}
+function validToday() {
+  var n = new Date();
+  return n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0");
+}
+function sanitizeProject(raw) {
+  var p = blankProject("");
+  if (!raw || typeof raw !== "object") return p;
+  if (typeof raw.name === "string") p.name = raw.name.slice(0, 120) || p.name;
+  if (typeof raw.mw === "string" || typeof raw.mw === "number") p.mw = String(raw.mw).slice(0, 12);
+  if (typeof raw.gfa === "string" || typeof raw.gfa === "number") p.gfa = String(raw.gfa).slice(0, 12);
+  p.t0 = validDate(raw.t0); p.cca = validDate(raw.cca);
+  if (validDate(raw.createdAt)) p.createdAt = raw.createdAt;
+  var rms = (raw.ms && typeof raw.ms === "object") ? raw.ms : {};
+  CATALOG.forEach(function (c) {
+    if (!hasOwn(rms, c.id)) return;
+    var m = rms[c.id];
+    if (!m || typeof m !== "object") return;
+    var o = {};
+    if (!c.locked && !c.computed && m.off !== undefined) o.off = clampInt(m.off, -900, 900, c.off);
+    if (typeof m.status === "string" && STATUSES.indexOf(m.status) >= 0) o.status = m.status;
+    var act = validDate(m.actual);
+    if (act) o.actual = act;
+    ["owner", "ref", "note"].forEach(function (k) {
+      if (typeof m[k] === "string") o[k] = m[k].slice(0, 300);
+    });
+    if (m.docs && typeof m.docs === "object") {
+      o.docs = {};
+      (c.docs || []).forEach(function (d, i) {
+        var slug = docSlug(d);
+        if (m.docs[slug] === true || m.docs[i] === true || m.docs[String(i)] === true) o.docs[slug] = true;
+      });
+    }
+    p.ms[c.id] = o;
+  });
+  if (raw.baseline && typeof raw.baseline === "object") {
+    var bt0 = validDate(raw.baseline.t0);
+    if (bt0) {
+      var b = { t0: bt0, setAt: validDate(raw.baseline.setAt) || validToday(), offsets: {} };
+      CATALOG.forEach(function (c) {
+        var v = raw.baseline.offsets && raw.baseline.offsets[c.id];
+        b.offsets[c.id] = clampInt(v, -900, 900, c.off);
+      });
+      p.baseline = b;
+    }
+  }
+  return p;
+}
+function defaultDb() {
+  var p = blankProject("My first DC project");
+  return { projects: { p1: p }, activeId: "p1", seq: 1, rev: 0, lastExportRev: 0 };
+}
+function sanitizeDb(raw) {
+  var db2 = defaultDb();
+  if (!raw || typeof raw !== "object" || !raw.projects || typeof raw.projects !== "object") return db2;
+  db2.projects = {};
+  Object.keys(raw.projects).slice(0, 50).forEach(function (id) {
+    if (/^p\d+$/.test(id)) db2.projects[id] = sanitizeProject(raw.projects[id]);
+  });
+  if (!Object.keys(db2.projects).length) db2.projects.p1 = blankProject("My first DC project");
+  var maxId = 1;
+  Object.keys(db2.projects).forEach(function (id) { maxId = Math.max(maxId, parseInt(id.slice(1), 10) || 1); });
+  db2.seq = Math.max(clampInt(raw.seq, 1, 1e6, 1), maxId);
+  db2.rev = clampInt(raw.rev, 0, 1e9, 0);
+  db2.lastExportRev = clampInt(raw.lastExportRev, 0, 1e9, 0);
+  db2.activeId = (typeof raw.activeId === "string" && hasOwn(db2.projects, raw.activeId)) ?
+    raw.activeId : Object.keys(db2.projects)[0];
+  return db2;
+}
+var db = sanitizeDb(store.load());
+var tab = "dash";
+var wsOpen = {}; // session-only accordion preferences
+function proj() { return db.projects[db.activeId]; }
+function persist() {
+  var stored = store.load();
+  if (stored && clampInt(stored.rev, 0, 1e9, 0) > db.rev) {
+    // another tab/copy wrote a newer revision — adopt it rather than clobber
+    db = sanitizeDb(stored);
+    showBanner("Another tab or copy of this app saved newer data — reloaded it here to avoid overwriting. Re-apply your last change if needed.", "amber");
+    render(); return;
+  }
+  db.rev++;
+  if (!store.write(db)) showSaveWarn(true); else showSaveWarn(false);
+}
+function showSaveWarn(on) {
+  var w = document.getElementById("saveWarn");
+  if (!w) return;
+  w.hidden = !on;
+  if (on) w.textContent = "Warning: this browser is not persisting your changes (private mode / storage blocked). Your edits last this session only — use Export before closing.";
+}
+var bannerMsg = null, bannerLvl = "info";
+function showBanner(msg, lvl) { bannerMsg = msg; bannerLvl = lvl || "info"; }
+
+/* ================= computed model ================= */
+function mVal(id, key) { var m = proj().ms[id] || {}; return m[key]; }
+function mOff(c) {
+  if (c.computed) return mOffById("topgrant") + 730;
+  if (c.locked) return 0;
+  var o = mVal(c.id, "off");
+  return (typeof o === "number") ? o : c.off;
+}
+function mOffById(id) { return mOff(catItem(id)); }
+function mStatus(c) { return mVal(c.id, "status") || "Not started"; }
+function parseD(s) { var p = s.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+function t0Date() { var p = proj(); return p.t0 ? parseD(p.t0) : null; }
+function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+function fmt(d) { return d.toLocaleDateString("en-SG", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }); }
+function today0() { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+function mDate(c) { var t = t0Date(); return t ? addDays(t, mOff(c)) : null; }
+function isOverdue(c) {
+  var d = mDate(c), s = mStatus(c);
+  return d && d < today0() && s !== "Done" && s !== "N/A";
+}
+function isDueSoon(c) {
+  var d = mDate(c), s = mStatus(c);
+  if (!d || s === "Done" || s === "N/A") return false;
+  var t = today0();
+  return d >= t && (d - t) / 86400000 <= 14;
+}
+function baselineDelta(c) {
+  var p = proj();
+  if (!p.baseline || !p.t0 || c.computed) return null;
+  var cur = addDays(parseD(p.t0), mOff(c));
+  var base = addDays(parseD(p.baseline.t0), p.baseline.offsets[c.id]);
+  return Math.round((cur - base) / 86400000);
+}
+function wsItems(wsId) { return CATALOG.filter(function (c) { return c.ws === wsId; }); }
+function wsStats(wsId) {
+  var items = wsItems(wsId), done = 0, red = false, amber = false;
+  items.forEach(function (c) {
+    var s = mStatus(c);
+    if (s === "Done" || s === "N/A") done++;
+    if (isOverdue(c)) red = true;
+    else if (isDueSoon(c) || s === "Blocked") amber = true;
+  });
+  return { total: items.length, done: done, rag: red ? "red" : (amber ? "amber" : "green") };
+}
+function gateChecks() {
+  var out = [], t = t0Date(), p = proj();
+  var copifOff = mOffById("copif");
+  if (copifOff > -183 && mStatus(catItem("copif")) !== "Done")
+    out.push({ lvl: "red", msg: "COPIF completion is set inside the 6-month statutory zone (needs ≤ T−183; currently T" + (copifOff < 0 ? "−" + (-copifOff) : "+" + copifOff) + "). Move it earlier or evidence completion." });
+  if (p.cca && t) {
+    var ccaD = parseD(p.cca);
+    var energiseD = addDays(t, mOffById("energise"));
+    if (ccaD >= energiseD) {
+      out.push({ lvl: "red", msg: "The CCA date is on or after planned energisation — check the dates in Setup." });
+    } else {
+      var months = (energiseD - ccaD) / 86400000 / 30.44;
+      if (months < 21)
+        out.push({ lvl: "red", msg: "Grid lead time is " + months.toFixed(1) + " months from CCA to planned energisation — below SP's published 21–26 month range. The TOP date is likely power-constrained." });
+      else if (months < 26)
+        out.push({ lvl: "amber", msg: "Grid lead time is " + months.toFixed(1) + " months CCA→energisation — inside SP's 21–26 month band but with little contingency." });
+    }
+  } else if (!p.cca) {
+    out.push({ lvl: "amber", msg: "No CCA date recorded. For a 66 kV+ connection the CCA-to-energisation lead is ~21–26 months — enter it in Setup to check the power critical path." });
+  }
+  if (t) {
+    var wk = t.getDay();
+    if (wk === 0 || wk === 6) out.push({ lvl: "amber", msg: "Target TOP inspection (T0) falls on a weekend — BCA inspections are working-day events." });
+    var gap = mOffById("fsc") - mOffById("tfp");
+    if (gap > 183)
+      out.push({ lvl: "amber", msg: "FSC is planned " + gap + " days after TFP — TFP validity is typically ≤6 months. Pull FSC earlier or plan a TFP extension case." });
+  }
+  if (p.baseline && p.baseline.t0 !== p.t0 && p.t0)
+    out.push({ lvl: "amber", msg: "T0 has moved from " + fmt(parseD(p.baseline.t0)) + " (baseline of " + p.baseline.setAt + ") to " + fmt(parseD(p.t0)) + "." });
+  return out;
+}
+
+/* ================= views ================= */
+var TABS = [["dash", "Dashboard"], ["timeline", "Timeline"], ["work", "Workstreams"], ["setup", "Setup"], ["report", "Report"]];
+function render() {
+  var sel = document.getElementById("projSel");
+  var names = {};
+  Object.keys(db.projects).forEach(function (id) {
+    var n = db.projects[id].name;
+    names[n] = (names[n] || 0) + 1;
+  });
+  sel.innerHTML = Object.keys(db.projects).map(function (id) {
+    var n = db.projects[id].name;
+    var label = names[n] > 1 ? n + " (" + id + ")" : n;
+    return "<option value=\"" + id + "\"" + (id === db.activeId ? " selected" : "") + ">" + esc(label) + "</option>";
+  }).join("");
+  document.getElementById("tabs").innerHTML = TABS.map(function (t) {
+    return "<button class=\"" + (tab === t[0] ? "on" : "") + "\" onclick=\"go('" + t[0] + "')\">" + t[1] + "</button>";
+  }).join("");
+  var v = document.getElementById("view");
+  var pre = "";
+  if (bannerMsg) { pre += "<div class=\"alert " + bannerLvl + "\">" + esc(bannerMsg) + "</div>"; bannerMsg = null; }
+  if (!proj().t0 && tab !== "setup")
+    pre += "<div class=\"alert amber\">No target T0 set — dates show as T-offsets. <a href=\"#\" onclick=\"go('setup');return false\">Set the target inspection date in Setup</a>.</div>";
+  if (db.rev > db.lastExportRev + 25)
+    pre += "<div class=\"alert info\">You have substantial unexported changes — use Export all for a backup file.</div>";
+  if (tab === "dash") v.innerHTML = pre + vDash();
+  else if (tab === "timeline") v.innerHTML = pre + vTimeline();
+  else if (tab === "work") v.innerHTML = pre + vWork();
+  else if (tab === "setup") v.innerHTML = pre + vSetup();
+  else v.innerHTML = pre + vReport();
+}
+function go(t) { tab = t; render(); }
+
+function vSetup() {
+  var p = proj();
+  return "<div class=\"panel\"><h3>Project setup</h3><div class=\"setupform\">" +
+    "<label>Project name<input id=\"suName\" value=\"" + esc(p.name) + "\"></label>" +
+    "<label>Target BCA TOP inspection date (T0)<input type=\"date\" id=\"suT0\" value=\"" + esc(p.t0) + "\"></label>" +
+    "<label>Consumer Connection Agreement (CCA) date<input type=\"date\" id=\"suCca\" value=\"" + esc(p.cca) + "\"></label>" +
+    "<label>IT capacity (MW)<input id=\"suMw\" value=\"" + esc(p.mw) + "\" placeholder=\"e.g. 30\"></label>" +
+    "<label>GFA (m²)<input id=\"suGfa\" value=\"" + esc(p.gfa) + "\" placeholder=\"e.g. 25000\"></label>" +
+    "<div><button class=\"primary\" onclick=\"saveSetup()\">Save & open dashboard</button> " +
+    "<button class=\"ghost\" onclick=\"loadSample()\">Load sample project</button></div>" +
+    "</div></div>" +
+    "<div class=\"alert info\">Milestone lead times default to the verified dataset v" + DATASET_VERSION +
+    " and are editable per milestone in Workstreams. T0 drives every date; the CCA date powers " +
+    "the grid-lead-time check. Use <b>Set baseline</b> on the dashboard once the plan is agreed — " +
+    "variance is then tracked against it.</div>";
+}
+function saveSetup() {
+  var p = proj();
+  p.name = (document.getElementById("suName").value || p.name).slice(0, 120);
+  p.t0 = validDate(document.getElementById("suT0").value);
+  p.cca = validDate(document.getElementById("suCca").value);
+  p.mw = document.getElementById("suMw").value.slice(0, 12);
+  p.gfa = document.getElementById("suGfa").value.slice(0, 12);
+  persist();
+  if (p.t0) { tab = "dash"; }
+  else showBanner("Saved. Enter a valid target T0 inspection date to open the dated dashboard — every milestone date is computed from it.", "amber");
+  render();
+}
+function loadSample() {
+  db.seq++;
+  var id = "p" + db.seq;
+  var t = addDays(today0(), 240);
+  var cca = addDays(today0(), 240 - 90 - 800); // ~26 months before energisation
+  function iso(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  var p = blankProject("Sample: Tuas 30 MW DC");
+  p.mw = "30"; p.gfa = "25000"; p.t0 = iso(t); p.cca = iso(cca);
+  ["cca", "gensetlic", "substn", "cocreg", "riappt", "copifbook", "liftplan"].forEach(function (mid) {
+    p.ms[mid] = { status: "Done" };
+  });
+  p.ms.copif = { status: "In progress" };
+  p.ms.pfmapp = { status: "Blocked", note: "awaiting bunding as-builts" };
+  db.projects[id] = p; db.activeId = id; tab = "dash";
+  persist(); render();
+}
+
+function vDash() {
+  var t = t0Date();
+  var total = 0, done = 0, overdue = 0;
+  CATALOG.forEach(function (c) {
+    total++;
+    var s = mStatus(c);
+    if (s === "Done" || s === "N/A") done++;
+    if (isOverdue(c)) overdue++;
+  });
+  var daysTo = t ? Math.round((t - today0()) / 86400000) : null;
+  var h = "<div class=\"grid g3\">";
+  h += "<div class=\"panel\"><h3>Days to T0</h3><div class=\"big\">" +
+    (daysTo === null ? "—" : daysTo) + "<small>" + (t ? fmt(t) : "set a date in Setup") + "</small></div></div>";
+  h += "<div class=\"panel\"><h3>Readiness</h3><div class=\"big\">" +
+    Math.round(done / total * 100) + "%<small>" + done + " of " + total + " milestones done/NA</small></div></div>";
+  h += "<div class=\"panel\"><h3>Overdue</h3><div class=\"big\" style=\"color:" +
+    (overdue ? "var(--red)" : "var(--green)") + "\">" + overdue +
+    "<small>items past their planned date</small></div></div>";
+  h += "</div>";
+  var gates = gateChecks();
+  if (gates.length) {
+    h += "<div class=\"panel\" style=\"margin-top:14px\"><h3>Gate checks</h3>";
+    gates.forEach(function (g) { h += "<div class=\"alert " + g.lvl + "\">" + esc(g.msg) + "</div>"; });
+    h += "</div>";
+  }
+  var p = proj();
+  h += "<div class=\"panel\" style=\"margin-top:14px\"><h3>Baseline</h3><p>" +
+    (p.baseline ? "Baseline set " + esc(p.baseline.setAt) + " (T0 " + fmt(parseD(p.baseline.t0)) +
+      "). Variance is shown per milestone in Workstreams." :
+      "No baseline yet — once the plan is agreed, snapshot it to track slippage.") +
+    " <button class=\"ghost noprint\" onclick=\"setBaseline()\">" +
+    (p.baseline ? "Re-baseline to current plan" : "Set baseline") + "</button></p></div>";
+  h += "<div class=\"grid g3\" style=\"margin-top:14px\">";
+  h += "<div class=\"panel\" style=\"grid-column: span 1\"><h3>Workstreams</h3>";
+  WORKSTREAMS.forEach(function (w) {
+    var s = wsStats(w.id);
+    h += "<div class=\"wsrow\"><span class=\"rag " + s.rag + "\" title=\"" +
+      (s.rag === "red" ? "Overdue items" : s.rag === "amber" ? "Due soon or blocked" : "On track") +
+      "\"></span>" + w.name + "<span class=\"pct\">" + s.done + "/" + s.total + "</span></div>";
+  });
+  h += "</div>";
+  h += "<div class=\"panel\" style=\"grid-column: span 2\"><h3>Next 8 actions</h3><table><tr><th>Date</th><th>Milestone</th><th>Workstream</th><th>Status</th></tr>";
+  var upcoming = CATALOG.filter(function (c) {
+    var s = mStatus(c); return s !== "Done" && s !== "N/A" && !c.locked;
+  }).sort(function (a, b) { return mOff(a) - mOff(b); }).slice(0, 8);
+  upcoming.forEach(function (c) {
+    var d = mDate(c);
+    var cls = isOverdue(c) ? "overdue" : (isDueSoon(c) ? "due" : "");
+    var flag = isOverdue(c) ? " <span class=\"b over\">OVERDUE</span>" : (isDueSoon(c) ? " <span class=\"b duesoon\">DUE ≤14d</span>" : "");
+    var wname = "";
+    WORKSTREAMS.forEach(function (w) { if (w.id === c.ws) wname = w.name; });
+    h += "<tr class=\"" + cls + "\"><td>" + (d ? fmt(d) : "T" + (mOff(c) >= 0 ? "+" : "") + mOff(c)) + flag +
+      "</td><td>" + esc(c.label) + (c.hard ? " <span class=\"b hard\">HARD GATE</span>" : "") +
+      "</td><td>" + wname + "</td><td>" + mStatus(c) + "</td></tr>";
+  });
+  h += "</table></div></div>";
+  return h;
+}
+function setBaseline() {
+  var p = proj();
+  if (!p.t0) { showBanner("Set a T0 date before baselining.", "amber"); render(); return; }
+  if (p.baseline && !confirm("Replace the existing baseline (" + p.baseline.setAt + ") with the current plan?")) return;
+  var b = { t0: p.t0, setAt: validToday(), offsets: {} };
+  CATALOG.forEach(function (c) { b.offsets[c.id] = mOff(c); });
+  p.baseline = b; persist(); render();
+}
+
+function pctClamp(x) { return Math.min(100, Math.max(0, x)); }
+function vTimeline() {
+  var lo = -900, hi = 760, span = hi - lo;
+  var t = t0Date();
+  var h = "<div class=\"panel\"><h3>Programme timeline (offsets in days vs T0)</h3><div class=\"tl\">";
+  WORKSTREAMS.forEach(function (w) {
+    var items = wsItems(w.id);
+    var offs = items.map(mOff);
+    var a = Math.min.apply(null, offs), b = Math.max.apply(null, offs);
+    h += "<div class=\"lane\"><span class=\"lbl\">" + w.name + "</span><span class=\"track\">";
+    var left = pctClamp((a - lo) / span * 100), right = pctClamp((b - lo) / span * 100);
+    h += "<span class=\"bar\" style=\"left:" + left + "%;width:" + Math.max(0.5, right - left) + "%\"></span>";
+    items.forEach(function (c) {
+      var o = mOff(c), s = mStatus(c);
+      var cls = (s === "Done" || s === "N/A") ? "done" : (isOverdue(c) ? "late" : "todo");
+      h += "<span class=\"dot " + cls + (c.hard ? " hardgate" : "") + "\" title=\"" +
+        esc(c.label) + " (T" + (o >= 0 ? "+" : "") + o + ")\" style=\"left:" +
+        pctClamp((o - lo) / span * 100) + "%\"></span>";
+    });
+    if (t) {
+      var tdOff = Math.round((today0() - t) / 86400000);
+      if (tdOff >= lo && tdOff <= hi)
+        h += "<span class=\"today\" style=\"left:" + pctClamp((tdOff - lo) / span * 100) + "%\"></span>";
+    }
+    h += "</span></div>";
+  });
+  h += "<div class=\"axis\"><span>T−900</span><span>T−485</span><span>T−70</span><span>T+345</span><span>T+760</span></div>";
+  h += "</div><p class=\"mnote\">Bars span each workstream's first to last milestone. Red line = today. " +
+    "Outlined markers are hard gates. Hover any marker for the milestone and offset.</p></div>";
+  return h;
+}
+
+function onWsToggle(wsId, el) { wsOpen[wsId] = el.open; }
+function vWork() {
+  var h = "";
+  WORKSTREAMS.forEach(function (w) {
+    var s = wsStats(w.id);
+    var open = hasOwn(wsOpen, w.id) ? wsOpen[w.id] : s.rag !== "green";
+    h += "<details class=\"ws\" " + (open ? "open" : "") + " ontoggle=\"onWsToggle('" + w.id + "', this)\"><summary><span class=\"rag " +
+      s.rag + "\" title=\"" + (s.rag === "red" ? "Overdue items" : s.rag === "amber" ? "Due soon or blocked" : "On track") +
+      "\"></span>" + w.name + "<span class=\"pct\">" + s.done + "/" + s.total + " done</span></summary>";
+    h += "<div class=\"inner\"><table><tr><th style=\"width:5.5em\">Lead (d)</th><th style=\"width:10em\">Planned</th><th style=\"width:8em\">Actual</th><th>Milestone</th><th style=\"width:4.5em\">Basis</th><th style=\"width:7em\">Agency</th><th style=\"width:8.5em\">Status</th><th style=\"width:8em\">Owner</th><th style=\"width:7em\">Ref no.</th></tr>";
+    wsItems(w.id).forEach(function (c) {
+      var d = mDate(c), st = mStatus(c);
+      var cls = (st === "Done") ? "done" : (isOverdue(c) ? "overdue" : (isDueSoon(c) ? "due" : ""));
+      var delta = baselineDelta(c);
+      var flag = isOverdue(c) ? " <span class=\"b over\">OVERDUE</span>" : (isDueSoon(c) ? " <span class=\"b duesoon\">DUE ≤14d</span>" : "");
+      h += "<tr class=\"" + cls + "\"><td>" +
+        ((c.locked || c.computed) ? String(mOff(c)) :
+          "<input class=\"cell num\" id=\"off-" + c.id + "\" type=\"number\" value=\"" + mOff(c) +
+          "\" onchange=\"setMs('" + c.id + "','off',this)\">") + "</td>";
+      h += "<td>" + (d ? fmt(d) : "—") +
+        (delta ? " <span class=\"b " + (delta > 0 ? "over" : "duesoon") + "\" title=\"vs baseline\">" +
+          (delta > 0 ? "+" : "") + delta + "d</span>" : "") + flag + "</td>";
+      h += "<td><input class=\"cell\" type=\"date\" value=\"" + esc(mVal(c.id, "actual") || "") +
+        "\" onchange=\"setMs('" + c.id + "','actual',this)\"></td>";
+      h += "<td>" + esc(c.label) + (c.hard ? " <span class=\"b hard\">HARD GATE</span>" : "");
+      if (c.info) h += "<div class=\"mnote\">" + esc(c.info) + "</div>";
+      if (c.docs && c.docs.length) {
+        var docs = (proj().ms[c.id] || {}).docs || {};
+        h += "<div class=\"docs\">" + c.docs.map(function (dn) {
+          var slug = docSlug(dn);
+          return "<label><input type=\"checkbox\" " + (docs[slug] ? "checked" : "") +
+            " onchange=\"setDoc('" + c.id + "','" + slug + "',this.checked)\">" + esc(dn) + "</label>";
+        }).join("") + "</div>";
+      }
+      var note = mVal(c.id, "note") || "";
+      h += "<input class=\"cell\" placeholder=\"note\" value=\"" + esc(note) +
+        "\" onchange=\"setMs('" + c.id + "','note',this)\" style=\"margin-top:3px\">";
+      h += "</td>";
+      h += "<td>" + (c.basis ? "<span class=\"b " + c.basis.toLowerCase() + "\">" + c.basis + "</span>" : "") + "</td>";
+      h += "<td>" + esc(c.agency || "") + "</td>";
+      h += "<td><select id=\"st-" + c.id + "\" onchange=\"setMs('" + c.id + "','status',this)\">" +
+        STATUSES.map(function (s2) { return "<option" + (s2 === st ? " selected" : "") + ">" + s2 + "</option>"; }).join("") +
+        "</select></td>";
+      h += "<td><input class=\"cell\" value=\"" + esc(mVal(c.id, "owner") || "") +
+        "\" onchange=\"setMs('" + c.id + "','owner',this)\"></td>";
+      h += "<td><input class=\"cell\" value=\"" + esc(mVal(c.id, "ref") || "") +
+        "\" onchange=\"setMs('" + c.id + "','ref',this)\"></td></tr>";
+    });
+    h += "</table></div></details>";
+  });
+  return h;
+}
+
+function vReport() {
+  var p = proj();
+  var t = t0Date();
+  var h = "<div class=\"panel\"><h3>Status report — " + esc(p.name) + "</h3>";
+  h += "<p>" + (p.mw ? esc(p.mw) + " MW · " : "") + (p.gfa ? esc(p.gfa) + " m² · " : "") +
+    "T0 " + (t ? fmt(t) : "not set") +
+    (t ? " (" + Math.round((t - today0()) / 86400000) + " days out)" : "") +
+    " · Generated " + fmt(today0()) + " · Dataset v" + DATASET_VERSION +
+    (p.baseline ? " · Baseline " + esc(p.baseline.setAt) : " · No baseline set") + "</p>";
+  gateChecks().forEach(function (g) { h += "<div class=\"alert " + g.lvl + "\">" + esc(g.msg) + "</div>"; });
+  h += "<table><tr><th>Workstream</th><th>Progress</th><th>Overdue / blocked items</th></tr>";
+  WORKSTREAMS.forEach(function (w) {
+    var s = wsStats(w.id);
+    var bad = wsItems(w.id).filter(function (c) { return isOverdue(c) || mStatus(c) === "Blocked"; })
+      .map(function (c) { return esc(c.label) + (mStatus(c) === "Blocked" ? " [blocked]" : ""); }).join("; ") || "—";
+    h += "<tr><td><span class=\"rag " + s.rag + "\"></span>" + w.name + " (" +
+      (s.rag === "red" ? "attention" : s.rag === "amber" ? "watch" : "on track") + ")</td><td>" +
+      s.done + "/" + s.total + "</td><td>" + bad + "</td></tr>";
+  });
+  h += "</table>";
+  if (t) {
+    h += "<h3 style=\"margin-top:14px\">Next 30 days</h3><table><tr><th>Date</th><th>Milestone</th><th>Agency</th><th>Owner</th><th>Status</th></tr>";
+    var now = today0(), horizon = addDays(now, 30);
+    CATALOG.filter(function (c) {
+      var s = mStatus(c), d = mDate(c);
+      return d && d >= now && d <= horizon && s !== "Done" && s !== "N/A";
+    }).sort(function (a, b) { return mOff(a) - mOff(b); }).forEach(function (c) {
+      h += "<tr><td>" + fmt(mDate(c)) + "</td><td>" + esc(c.label) + "</td><td>" + esc(c.agency || "") +
+        "</td><td>" + esc(mVal(c.id, "owner") || "") + "</td><td>" + mStatus(c) + "</td></tr>";
+    });
+    h += "</table>";
+  }
+  h += "<p class=\"noprint\" style=\"margin-top:10px\"><button class=\"primary\" onclick=\"window.print()\">Print report</button></p></div>";
+  return h;
+}
+
+/* ================= mutations ================= */
+function ms(id) { var p = proj(); if (!p.ms[id]) p.ms[id] = {}; return p.ms[id]; }
+function setMs(id, key, el) {
+  if (key === "off") {
+    var n = Math.trunc(Number(el.value));
+    if (!Number.isFinite(n)) { el.value = mOffById(id); return; }
+    ms(id).off = Math.min(900, Math.max(-900, n));
+  } else if (key === "status") {
+    ms(id).status = STATUSES.indexOf(el.value) >= 0 ? el.value : "Not started";
+  } else if (key === "actual") {
+    var v = validDate(el.value);
+    if (v) ms(id).actual = v; else delete ms(id).actual;
+  } else {
+    ms(id)[key] = String(el.value).slice(0, 300);
+    persist(); return; // owner/ref/note: no re-render needed — keeps tab-through data entry intact
+  }
+  persist(); render();
+  var f = document.getElementById((key === "status" ? "st-" : "off-") + id);
+  if (f && (key === "status" || key === "off")) { f.focus(); if (f.select) f.select(); }
+}
+function setDoc(id, slug, on) {
+  var m = ms(id);
+  if (!m.docs) m.docs = {};
+  if (on) m.docs[slug] = true; else delete m.docs[slug];
+  persist(); render();
+}
+function switchProject(id) { if (hasOwn(db.projects, id)) { db.activeId = id; tab = "dash"; persist(); render(); } }
+function newProject() {
+  if (Object.keys(db.projects).length >= 50) { alert("Project limit (50) reached — delete or export old projects first."); return; }
+  var name = prompt("New project name:", "DC project " + (db.seq + 1));
+  if (name === null) return;
+  db.seq++;
+  var id = "p" + db.seq;
+  db.projects[id] = blankProject(String(name).slice(0, 120) || "DC project " + db.seq);
+  db.activeId = id; tab = "setup"; persist(); render();
+}
+function renameProject() {
+  var name = prompt("Rename project:", proj().name);
+  if (name === null) return;
+  proj().name = String(name).slice(0, 120) || proj().name;
+  persist(); render();
+}
+function deleteProject() {
+  if (!confirm("Delete project \"" + proj().name + "\" and all its tracking data? A copy is kept under a recovery slot until the next deletion.")) return;
+  try { localStorage.setItem(store.KEY + "-trash", JSON.stringify({ deletedAt: validToday(), project: proj() })); } catch (e) {}
+  delete db.projects[db.activeId];
+  if (!Object.keys(db.projects).length) { db.projects.p1 = blankProject("My first DC project"); db.seq = Math.max(db.seq, 1); }
+  db.activeId = Object.keys(db.projects)[0];
+  tab = "dash"; persist(); render();
+}
+function dl(name, text, type) {
+  var blob = new Blob([text], { type: type });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function exportProject() {
+  dl(proj().name.replace(/[^\w-]+/g, "-").slice(0, 40) + "-dctop.json",
+     JSON.stringify({ app: "dctop", version: 1, dataset: DATASET_VERSION, project: proj() }, null, 2),
+     "application/json");
+  db.lastExportRev = db.rev; persist();
+}
+function exportAll() {
+  dl("dctop-workspace-backup.json",
+     JSON.stringify({ app: "dctop", version: 1, dataset: DATASET_VERSION,
+       projects: db.projects, activeId: db.activeId, seq: db.seq }, null, 2),
+     "application/json");
+  db.lastExportRev = db.rev; persist();
+}
+function icsEsc(s) { return String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n"); }
+function exportIcs() {
+  var t = t0Date();
+  if (!t) { alert("Set a T0 date first — calendar entries need dates."); return; }
+  var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//TOP Compass//DC TOP Tracker//EN"];
+  CATALOG.forEach(function (c) {
+    var s = mStatus(c);
+    if (s === "Done" || s === "N/A") return;
+    var d = addDays(t, mOff(c));
+    var ymd = d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    lines.push("BEGIN:VEVENT", "UID:" + c.id + "@dctop.topcompass",
+      "DTSTART;VALUE=DATE:" + ymd,
+      "SUMMARY:" + icsEsc("[" + proj().name + "] " + c.label),
+      "DESCRIPTION:" + icsEsc((c.agency ? c.agency + " · " : "") + (c.info || "")),
+      "BEGIN:VALARM", "TRIGGER:-P14D", "ACTION:DISPLAY", "DESCRIPTION:14-day reminder", "END:VALARM",
+      "END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+  dl(proj().name.replace(/[^\w-]+/g, "-").slice(0, 40) + "-dctop.ics", lines.join("\r\n"), "text/calendar");
+}
+function importProject(input) {
+  var f = input.files && input.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () {
+    try {
+      var parsed = JSON.parse(r.result);
+      if (!parsed || typeof parsed !== "object" || parsed.app !== "dctop")
+        throw new Error("not a dctop file");
+      if (parsed.projects && typeof parsed.projects === "object") {
+        // workspace backup: merge every project in as new entries
+        var count = Object.keys(parsed.projects).length;
+        if (!confirm("Import workspace backup with " + count + " project(s)? They are added alongside existing projects.")) { input.value = ""; return; }
+        Object.keys(parsed.projects).slice(0, 50).forEach(function (k) {
+          if (Object.keys(db.projects).length >= 50) return;
+          db.seq++;
+          db.projects["p" + db.seq] = sanitizeProject(parsed.projects[k]);
+        });
+        db.activeId = "p" + db.seq;
+      } else {
+        var clean = sanitizeProject(parsed.project);
+        if (!confirm("Import \"" + clean.name + "\" as a new project?")) { input.value = ""; return; }
+        if (Object.keys(db.projects).length >= 50) { alert("Project limit (50) reached."); input.value = ""; return; }
+        db.seq++;
+        db.projects["p" + db.seq] = clean; db.activeId = "p" + db.seq;
+      }
+      tab = proj().t0 ? "dash" : "setup";
+      persist(); render();
+    } catch (e) { alert("Could not import: not a valid DC TOP Tracker file."); }
+    input.value = "";
+  };
+  r.readAsText(f);
+}
+/* cross-tab awareness + private-mode probe */
+if (typeof window !== "undefined" && window.addEventListener) {
+  window.addEventListener("storage", function (e) {
+    if (e && e.key === store.KEY) {
+      db = sanitizeDb(store.load());
+      showBanner("Data updated in another tab — view refreshed.", "info");
+      render();
+    }
+  });
+}
+try { localStorage.setItem(store.KEY + "-probe", "1"); localStorage.removeItem(store.KEY + "-probe"); }
+catch (e) { setTimeout(function () { showSaveWarn(true); }, 0); }
+tab = proj().t0 ? "dash" : "setup";
+try { render(); }
+catch (e) {
+  try { localStorage.setItem(store.KEY + "-recovery", JSON.stringify(store.load())); } catch (e2) {}
+  db = defaultDb(); tab = "setup";
+  showBanner("The tracker hit a rendering fault. Your previous data was copied to a recovery slot and is untouched in storage — export it before making changes.", "red");
+  render();
+}
+</script>
+</body>
+</html>
