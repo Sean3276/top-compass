@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data centre TOP in Singapore — the sector-specific completion stack</title>
+<meta name="description" content="What sits on top of the standard BCA TOP/CSC process for Singapore data centres: grid connection lead times, EMA licensing, SCDF P&FM diesel storage, clean-agent fire suppression, NEA cooling tower rules, Green Mark for Data Centres, DC-CFA conditions and the Digital Infrastructure Bill.">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="inner">
+    <a class="brand" href="../">TOP Compass<span class="badge">PRO</span></a>
+    <nav>
+      <a href="../">Dependency map</a>
+      <a href="../#matrix">Clearance matrix</a>
+      <a href="../#checklist">Readiness checklist</a>
+      <a href="./" aria-current="page">Data centres</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <h1>Data centres: the most demanding TOP profile in Singapore</h1>
+  <p class="lead">A data centre goes through the same s.12 TOP/CSC process as any industrial
+  building — and then through a second stack of regimes no other typology carries: capacity
+  allocation, transmission-voltage grid connection, generation and electrical-installation
+  licensing, bulk fuel storage, clean-agent fire suppression, cooling-tower registration and a
+  dedicated Green Mark scheme. The base process is on the <a href="../">main dependency map</a>;
+  this page covers only what DCs add.</p>
+
+  <h2>Before anything else: you need a capacity award</h2>
+  <p>Since the 2019–2022 pause on new DC approvals, greenfield capacity is allocated by the
+  state, not the market. The regime so far:</p>
+  <div class="table-scroll">
+  <table>
+    <tr><th>When</th><th>What</th><th>Headline conditions</th></tr>
+    <tr><td>2019–2022</td><td>Moratorium (implicit; ~60 DCs / ~357&nbsp;MW at pause)</td><td>—</td></tr>
+    <tr><td>Jul 2022 – Jul 2023</td><td>Pilot DC-CFA: ~80&nbsp;MW provisionally awarded (AirTrunk–ByteDance, Equinix, GDS, Microsoft)</td>
+      <td>PUE ≤ 1.3 at 100% IT load; BCA-IMDA Green Mark (DC) Platinum; decarbonisation pathway</td></tr>
+    <tr><td>30 May 2024</td><td>Green DC Roadmap: +300&nbsp;MW near-term, +200&nbsp;MW tied to green energy</td>
+      <td>All DCs to reach PUE ≤ 1.3 within 10 years; new efficiency standards flagged</td></tr>
+    <tr><td>1 Dec 2025 – 31 Mar 2026</td><td>DC-CFA2: ≥200&nbsp;MW</td>
+      <td>GM DC 2024 <strong>Platinum mandatory</strong>; PUE ≤ 1.25 at 100% IT load; ≥50% powered by
+      eligible green pathways; SS 715:2025 (IT equipment efficiency)</td></tr>
+    <tr><td>1 Jul 2026</td><td>Draft <strong>Digital Infrastructure Bill</strong> (consultation to 22 Jul 2026)</td>
+      <td>Licensing regime for DCs and major cloud providers; PUE standards to apply to
+      <em>all</em> DCs, existing and new; resilience/BCM/security duties put on a statutory footing</td></tr>
+  </table>
+  </div>
+  <p class="meta">CFA conditions (PUE ceilings, GM DC Platinum) attach to the capacity award and
+  its power/land arrangements — they are contractual award conditions rather than statutory TOP
+  preconditions, and the exact evidencing deadlines sit in non-public award letters. The
+  statutory hooks are the Green Mark minimums below and, once enacted, the Digital
+  Infrastructure Act's licence conditions.</p>
+
+  <h2>The DC overlay on the standard clearance matrix</h2>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Regime</th><th>What a DC adds</th><th>When it bites</th></tr>
+    <tr><td><strong>Grid connection (SP PowerGrid / EMA)</strong></td>
+      <td>Loads ≥ ~25.5&nbsp;MW must connect at transmission voltage (66&nbsp;kV+). Typical lead time from
+      Consumer Connection Agreement to energisation: <strong>~21 months</strong> (66&nbsp;kV from an existing
+      substation) to <strong>~26 months</strong> (new consumer-provided substation, handed over ~8 months
+      pre-energisation).</td>
+      <td>Start of design — this, not any BCA step, sets the completion date. No permanent power
+      → no IST, no fire T&amp;C, no TOP inspection.</td></tr>
+    <tr><td><strong>EMA electrical installation licence</strong></td>
+      <td>Required for non-domestic installations &gt;45&nbsp;kVA approved load; a Licensed Electrical
+      Worker of the appropriate class takes charge.</td>
+      <td>Completion/occupation stage — an operating licence in the TOP window.</td></tr>
+    <tr><td><strong>EMA generation licensing</strong></td>
+      <td>Standby diesel gensets that are <em>not grid-connected</em> (island-mode,
+      break-before-make) and &lt;10&nbsp;MW per the exemption order need no generation licence;
+      grid-synchronised schemes (closed transition, demand response) lose the exemption
+      (≥10&nbsp;MW grid-connected → Generation Licence; 1–10&nbsp;MW → Wholesaler licence).</td>
+      <td>Design decision with licensing consequences at completion.</td></tr>
+    <tr><td><strong>SCDF P&amp;FM storage licence</strong></td>
+      <td>Bulk diesel (Class II petroleum) above exemption quantities needs a Petroleum &amp;
+      Flammable Materials Storage Licence — ~19 working days processing including site
+      inspection, 110% bunding, validity up to 3 years. A multi-MW genset farm's fuel makes
+      this a standing licence.</td>
+      <td>Alongside the TFP/FSC chain; renewable in operation.</td></tr>
+    <tr><td><strong>Fire Code 2023 — DC-specific relief</strong></td>
+      <td>For "communication nerve centres, data process centres and process control rooms",
+      sprinklers may be replaced by clean-agent automatic extinguishing systems if the room has
+      1-hr fire-rated enclosure and doors, ≤2 exits, ≤15&nbsp;m direct travel distance, and the
+      system complies with Cl. 6.5.2. Every regulated product in that chain (agent hardware,
+      dampers, doors, cables) needs a Certificate of Conformity — compile them at procurement,
+      not at TFP time.</td>
+      <td>Plan approval → T&amp;C → RI inspection → TFP/FSC.</td></tr>
+    <tr><td><strong>NEA — cooling &amp; gensets</strong></td>
+      <td>Cooling towers are registrable aerosol-generating systems (mandatory since Mar 2022);
+      monthly plate counts and quarterly Legionella testing, with results submitted to NEA since
+      Oct 2024. Gensets: pollution-control study at BP stage, dispersion-modelled flue heights,
+      off-road engine emission standards, factory boundary noise limits.</td>
+      <td>Registration and test regimes start at commissioning.</td></tr>
+    <tr><td><strong>PUB — water for cooling</strong></td>
+      <td>Users ≥60,000&nbsp;m³/yr must submit an annual Water Efficiency Management Plan with
+      private sub-metering. NEWater is the promoted cooling source; WUE is scored in GM DC 2024
+      (the Green DC Roadmap cites a 2.0&nbsp;L/kWh benchmark for new DCs).</td>
+      <td>Operational, but metering/design decisions are locked at design.</td></tr>
+    <tr><td><strong>Green Mark</strong></td>
+      <td>Statutory minimum: any new building ≥2,000&nbsp;m² GFA needs the BC(ES) Regulations
+      minimum sustainability score, as-built compliance checked at completion. The DC-specific
+      scheme — GM DC 2024 (Platinum ≈ PUE 1.25 at 100% IT load, measured after PDU; energy
+      modelling at 25/50/75/100% loads; WUE scored) — is <em>contractually</em> required at
+      Platinum for CFA winners, with final energy proof running on 12 months of operational
+      data post-TOP.</td>
+      <td>Design score at BP; as-built at completion; performance proof post-TOP.</td></tr>
+    <tr><td><strong>IMDA / connectivity</strong></td>
+      <td>COPIF facilities (lead-in pipes, MDF/telecom rooms, risers) as for any development —
+      joint inspection ≥6 months before TOP. DCs integrating cable landing stations add FBO
+      licensing and the three designated landing sites (Tuas, Changi North, Tanah Merah).</td>
+      <td>COPIF: 6 months pre-TOP. CLS: its own licensing track.</td></tr>
+    <tr><td><strong>JTC (most DC land)</strong></td>
+      <td>Lessor consent for major works <em>and</em> fit-outs, plan endorsement, TOP/FSC
+      documents returned to JTC within 14 working days, building-agreement milestones.</td>
+      <td>Contract layer across the whole programme.</td></tr>
+  </table>
+  </div>
+
+  <h2>Completion sequencing: shell first, halls forever</h2>
+  <p>The market-standard delivery model is <strong>powered shell / shell-and-core</strong>: the
+  base building reaches TOP (often phased), and data halls follow as fit-out approvals with
+  their own completion cycles — base-build compliance sits with the developer, fit-out
+  compliance with the tenant, stitched together contractually so the integrated building stays
+  compliant. Commissioning runs Level 1–5, with Level 5 Integrated Systems Testing proving
+  redundancy under failure scenarios — IST is a market requirement that runs alongside, not
+  inside, the statutory inspections, but it competes for the same commissioned-systems window
+  and the same permanent power.</p>
+
+  <h2>What actually delays DC completion here</h2>
+  <ul>
+    <li><strong>The grid, overwhelmingly.</strong> 21–26 month energisation lead times collide
+    with aggressive build programmes; industry commentary and the slow starts of the pilot-CFA
+    winners both point at power infrastructure, not building approvals, as the pacing item.</li>
+    <li><strong>Specialised equipment supply chains</strong> (switchgear, chillers, clean-agent
+    systems) and the CoC paper trail for regulated fire products.</li>
+    <li><strong>Late licensing starts</strong> — the EI licence, P&amp;FM licence and cooling-tower
+    registration are each fast individually but sit at the end of chains that are not.</li>
+  </ul>
+
+  <div class="notice"><strong>Verification notes.</strong> The Fire Code purpose-group
+  designation for DCs, the ECA "registrable corporation" status of colocation operators, and
+  the precise CFA evidencing deadlines could not be confirmed from public sources — treat them
+  as engagement-specific questions for SCDF/NEA/IMDA consultation. Aspirating smoke detection
+  (VESDA) is universal practice but not confirmed as a code mandate. Sources include the Fire
+  Code 2023, EMA licensing guides, SP Group connection handbook, PUB/NEA regulations, GM DC
+  2024 criteria, IMDA/EDB CFA documents and the July 2026 draft Digital Infrastructure Bill.
+  General information for professionals, not advice. Last verified July 2026.</div>
+</main>
+<footer class="site">
+  <div class="inner">
+    <p>© 2026 TOP Compass Pro · <a href="../../about.html">About &amp; disclosure</a> ·
+    Sponsorships in this section are flat-fee and never influence content.</p>
+  </div>
+</footer>
+</body>
+</html>

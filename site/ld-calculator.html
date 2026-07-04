@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Late TOP? Liquidated damages calculator — Singapore new launch</title>
+<meta name="description" content="Estimate the liquidated damages a Singapore developer owes you for late delivery of vacant possession: 10% per annum on instalments paid, computed daily under the standard S&P.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="inner">
+    <a class="brand" href="./">TOP Compass</a>
+    <nav>
+      <a href="./">Home</a>
+      <a href="top-vs-csc.html">TOP vs CSC</a>
+      <a href="ld-calculator.html" aria-current="page">Late? LD calculator</a>
+      <a href="key-collection.html">Key collection</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <h1>Late-completion liquidated damages calculator</h1>
+  <p class="lead">If your developer delivers vacant possession after the date in your Sale &amp;
+  Purchase Agreement, the standard S&amp;P prescribed by the Housing Developers Rules entitles
+  you to liquidated damages at <strong>10% per annum on the instalments you have paid</strong>,
+  computed daily, until vacant possession is delivered.</p>
+
+  <form class="calc" onsubmit="calc(); return false;">
+    <label>Total instalments paid so far (S$)
+      <input type="number" id="paid" min="0" step="1000" placeholder="e.g. 900000" required>
+    </label>
+    <label>Contractual vacant possession date (in your S&amp;P)
+      <input type="date" id="due" required>
+    </label>
+    <label>Actual / expected delivery date
+      <input type="date" id="actual" required>
+    </label>
+    <button type="submit">Calculate</button>
+  </form>
+
+  <div id="result" hidden>
+    <div>Days late: <strong id="days"></strong></div>
+    <div>Daily liquidated damages: <strong id="daily"></strong></div>
+    <div class="big" id="total"></div>
+  </div>
+
+  <h2>How the number is derived</h2>
+  <p>Daily LD = instalments paid × 10% ÷ 365. Total LD = daily LD × number of days between the
+  contractual vacant possession date and actual delivery. Example: if you have paid S$900,000
+  (typically ~60% of the price by this stage) and delivery is 90 days late, LD ≈ S$246.58/day
+  ≈ S$22,192.</p>
+
+  <h2>Practical notes before you claim</h2>
+  <p><strong>Check your actual S&amp;P dates.</strong> Developers build buffers into the
+  contractual date — a project delivering "later than the marketing brochure said" is often
+  still within contract. LD runs only from the contractual vacant possession date.</p>
+  <p><strong>The claim is contractual and self-executing.</strong> The standard S&amp;P obliges
+  the developer to pay; in practice you (or your solicitor) write to the developer's solicitors.
+  Many developers offset LD against the final payments due from you.</p>
+  <p><strong>Deviations need approval.</strong> The standard S&amp;P terms can only be varied
+  with the Controller of Housing's approval, so an S&amp;P without the 10% clause is rare —
+  but verify yours.</p>
+
+  <div class="notice">Estimate only — your S&amp;P governs. This is general information, not
+  legal advice; for a claim, engage your conveyancing solicitor. Basis: Housing Developers
+  Rules, standard form S&amp;P (forms revised 2023). Last verified July 2026.</div>
+
+<script>
+function calc() {
+  var paid = parseFloat(document.getElementById('paid').value);
+  var due = new Date(document.getElementById('due').value);
+  var actual = new Date(document.getElementById('actual').value);
+  var days = Math.round((actual - due) / 86400000);
+  var out = document.getElementById('result');
+  out.hidden = false;
+  if (isNaN(paid) || isNaN(days)) { return; }
+  if (days <= 0) {
+    document.getElementById('days').textContent = '0 — delivery is on or before the contractual date';
+    document.getElementById('daily').textContent = '—';
+    document.getElementById('total').textContent = 'No liquidated damages are due.';
+    return;
+  }
+  var daily = paid * 0.10 / 365;
+  var fmt = function (n) {
+    return 'S$' + n.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+  document.getElementById('days').textContent = days.toLocaleString('en-SG');
+  document.getElementById('daily').textContent = fmt(daily);
+  document.getElementById('total').textContent = 'Estimated total: ' + fmt(daily * days);
+}
+</script>
+</main>
+<footer class="site">
+  <div class="inner">
+    <p>© 2026 TOP Compass · <a href="about.html">About &amp; disclosure</a> ·
+    <a href="pro/">For industry professionals</a></p>
+  </div>
+</footer>
+</body>
+</html>

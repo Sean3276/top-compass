@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOP Compass Pro — the Singapore TOP/CSC dependency map</title>
+<meta name="description" content="For QPs, developer PMs and submission consultants: the TOP critical path, full agency clearance matrix, published inspection SLAs, and an interactive TOP-readiness checklist by project type.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="inner">
+    <a class="brand" href="./">TOP Compass<span class="badge">PRO</span></a>
+    <nav>
+      <a href="./" aria-current="page">Dependency map</a>
+      <a href="#matrix">Clearance matrix</a>
+      <a href="#sla">Agency SLAs</a>
+      <a href="#checklist">Readiness checklist</a>
+      <a href="data-centres/">Data centres</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <h1>The TOP critical path, assembled in one place</h1>
+  <p class="lead">Every clearance below is public knowledge — scattered across the Building
+  Control Act, seven agencies' pages and a decade of circulars. This page is the assembled
+  dependency graph, current to the CORENET X era. For the sector with the most demanding
+  completion profile, see the dedicated <a href="data-centres/">data centre section</a>.</p>
+
+  <h2>Critical path to TOP</h2>
+  <p class="meta">The pattern: utilities gate fire, fire gates everything. Everything else runs
+  in parallel — until it doesn't.</p>
+  <ol class="flow">
+    <li><strong>Permanent utilities turn-on</strong>
+      <span class="sub">SP permanent electricity (LEW CoC + SP inspection) and PUB water
+      turn-on (fire mains/hydrants live). Both gate testing &amp; commissioning. For new
+      residential developments &gt;10 units, the SP Services (MSSL) Notice of Unit Inspection
+      Completion is itself a TOP prerequisite.</span></li>
+    <li><strong>Test &amp; commission fire systems and lifts</strong>
+      <span class="sub">Fire protection T&amp;C needs live water and permanent power; lift
+      commissioning needs permanent power. Missing Certificates of Conformity for regulated
+      fire-safety products surface here — too late. Check them at procurement.</span></li>
+    <li><strong>Registered Inspector → SCDF TFP/FSC; lift PTOs</strong>
+      <span class="sub">Owner-appointed RI issues the Certificate of Inspection before the QP
+      applies to SCDF (response ~3 working days). The TFP carries TOP when only very minor fire
+      items are outstanding. Every lift/escalator needs a BCA Permit to Operate via LEAP —
+      since 1 Oct 2025, QP certification of fixed installations is a PTO prerequisite.</span></li>
+    <li><strong>Parallel workstreams close</strong>
+      <span class="sub">PUB sanitary/drainage/water clearances · NEA and URA technical
+      clearances · Green Mark as-built score (≥2,000 m² GFA) · as-built Buildable Design Score
+      (≥5,000 m²; submit ~2 months ahead) · CD shelter commissioning (book ≥5 working days
+      ahead) · CONQUAS/Quality Mark — since 1 Jun 2025 BCA will not even conduct the TOP
+      inspection until assessments are complete and site conditions acceptable.</span></li>
+    <li><strong>BCA TOP inspection → TOP</strong>
+      <span class="sub">Key forms (Certificate of Supervision, QP declaration) lodged ≥3 days
+      before inspection. BCA processes a complete application within 7 working days; Express
+      TOP in 1 working day (S$500/S$1,000); Express Inspection within ~4 days at S$3,000.</span></li>
+    <li><strong>CSC within 2 years</strong>
+      <span class="sub">LTA street works, NParks greenery, the FSC proper, survey plans and
+      residual items close out at CSC. For TOPs issued on/after 1 Jan 2023, the 2-year window
+      is enforced through written directions attached to the TOP.</span></li>
+  </ol>
+  <div class="notice"><strong>Don't book prematurely.</strong> BCA has said it twice in
+  circulars (APPBCA-2023-03, APPBCA-2024-20): inspections on unready sites are terminated, and
+  since 1 Jun 2025 unacceptable site conditions or incomplete CONQUAS stop the inspection from
+  happening at all.</div>
+
+  <h2 id="matrix">Agency clearance matrix</h2>
+  <div class="table-scroll">
+  <table>
+    <tr><th>Agency</th><th>Clearance</th><th>Stage</th><th>Watch for</th></tr>
+    <tr><td>SCDF</td><td>Temporary Fire Permit / Fire Safety Certificate</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>The classic bottleneck. TFP only for "very minor" outstanding items, ~6-month
+      validity; FSC by CSC; first Fire Certificate within 12 months of TOP/CSC (36-month
+      validity cycles from 1 Apr 2026).</td></tr>
+    <tr><td>PUB</td><td>Sanitary/sewerage, surface drainage, water (3 streams)</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>Water turn-on also gates fire T&amp;C — sequence it early.</td></tr>
+    <tr><td>NEA</td><td>Environmental health / pollution control</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>Largely photo/document-based.</td></tr>
+    <tr><td>URA</td><td>Written Permission condition compliance</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>Deviations must be waived or regularised before inspection — waivers are a
+      design-stage tool, not a TOP-stage rescue.</td></tr>
+    <tr><td>SP Services (MSSL)</td><td>Notice of Unit Inspection Completion</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>New residential developments &gt;10 units (APPBCA-2018-01).</td></tr>
+    <tr><td>LTA</td><td>Street works, vehicle parking, rail protection</td>
+      <td><span class="tag csc">CSC</span></td>
+      <td>20-working-day end-to-end SLA including inspections.</td></tr>
+    <tr><td>NParks</td><td>Greenery / landscape / tree conservation</td>
+      <td><span class="tag csc">CSC</span></td>
+      <td>7-working-day scheduling and response standards.</td></tr>
+    <tr><td>IMDA</td><td>COPIF infocomm infrastructure joint inspection</td>
+      <td><span class="tag top">6 months before TOP</span></td>
+      <td>The earliest completion-stage deadline — enforced under the Telecommunications Act,
+      outside the CORENET X gateway. Miss it and nothing else matters.</td></tr>
+    <tr><td>BCA (internal)</td><td>Lift/escalator PTOs · Green Mark as-built · B-score ·
+      CD shelters · accessibility · structural closeout · CONQUAS</td>
+      <td><span class="tag top">TOP</span></td>
+      <td>Accessibility incompleteness is an "unacceptable site condition" that aborts the
+      inspection.</td></tr>
+  </table>
+  </div>
+
+  <h2 id="sla">Published inspection service standards (BC-2025-01)</h2>
+  <p>BCA circular BC-2025-01 (1 Dec 2025) formalised, for the first time, the technical
+  agencies' service standards for TOP/CSC inspection scheduling and post-inspection response.
+  Partially extracted figures: URA 7 working days; NParks 7 + 7; PUB 14; LTA 20 working days
+  end-to-end. Response standards are per-agency — consult Annex A of the circular for the
+  authoritative table before planning around any single figure.</p>
+
+  <h2 id="checklist">TOP-readiness checklist</h2>
+  <p class="meta">Select a project type. Ticks persist in your browser only — nothing is
+  uploaded. Print for site meetings.</p>
+  <p>
+    <select id="ptype" onchange="filterType()">
+      <option value="all">All project types</option>
+      <option value="res">Non-landed residential</option>
+      <option value="landed">Landed (owner-occupied)</option>
+      <option value="com">Commercial / office / retail</option>
+      <option value="ind">Industrial</option>
+      <option value="dc">Data centre</option>
+    </select>
+    <button class="secondary" onclick="window.print()">Print</button>
+    <button class="secondary" onclick="resetChecks()">Reset ticks</button>
+  </p>
+  <div class="checklist" id="cl">
+    <details open><summary>Utilities &amp; power</summary><div class="items">
+      <label data-t="res com ind dc"><input type="checkbox">SP permanent electricity turn-on (LEW CoC + SP inspection)</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">PUB water turn-on incl. fire mains</label>
+      <label data-t="res"><input type="checkbox">SP Services (MSSL) Notice of Unit Inspection Completion (&gt;10 units)</label>
+      <label data-t="dc"><input type="checkbox">Substation/switchroom energisation &amp; EMA electrical installation licence (see data centre section)</label>
+    </div></details>
+    <details open><summary>Fire safety (SCDF)</summary><div class="items">
+      <label data-t="res com ind dc landed"><input type="checkbox">Fire systems tested &amp; commissioned</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">Certificates of Conformity for regulated fire-safety products compiled</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">Registered Inspector Certificate of Inspection</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">TFP or FSC application lodged</label>
+      <label data-t="dc"><input type="checkbox">Clean-agent/gaseous suppression commissioning records (see data centre section)</label>
+    </div></details>
+    <details open><summary>BCA internal</summary><div class="items">
+      <label data-t="res com ind dc"><input type="checkbox">Lift/escalator PTOs (LEAP) — QP fixed-installation certification since 1 Oct 2025</label>
+      <label data-t="res com ind dc"><input type="checkbox">Green Mark as-built score submitted (≥2,000 m² GFA)</label>
+      <label data-t="res com ind dc"><input type="checkbox">As-built Buildable Design Score (≥5,000 m²) — submit ~2 months ahead</label>
+      <label data-t="res landed"><input type="checkbox">CD shelter commissioning booked (≥5 working days ahead)</label>
+      <label data-t="res com ind dc"><input type="checkbox">CONQUAS / Quality Mark assessments complete (hard gate since 1 Jun 2025)</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">Accessibility / Universal Design works complete</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">Certificates of Supervision, QP declaration, builder's certificate, lightning protection &amp; ACMV certificates ready</label>
+    </div></details>
+    <details open><summary>Agency clearances</summary><div class="items">
+      <label data-t="res com ind dc landed"><input type="checkbox">PUB sanitary / drainage / water clearances (3 streams)</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">NEA technical clearance</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">URA Written Permission conditions — deviations regularised or waived</label>
+      <label data-t="res com ind dc"><input type="checkbox">IMDA COPIF joint inspection (≥6 months before TOP)</label>
+      <label data-t="ind dc"><input type="checkbox">JTC lessor requirements (plan endorsement; TOP/FSC documents to JTC within 14 working days)</label>
+    </div></details>
+    <details open><summary>Application</summary><div class="items">
+      <label data-t="res com ind dc landed"><input type="checkbox">All waivers already in hand (BCA s.6A / SCDF s.59 / URA / PUB) — the TOP checklist assumes them obtained</label>
+      <label data-t="res com ind dc"><input type="checkbox">Forms lodged ≥3 days before inspection; site in acceptable condition</label>
+      <label data-t="landed"><input type="checkbox">Landed self-inspection checklist + shelter commissioning video (no BCA inspection since Dec 2020)</label>
+      <label data-t="res com ind dc landed"><input type="checkbox">Diary the 2-year TOP→CSC window and the written-direction compliance periods</label>
+    </div></details>
+  </div>
+
+  <div class="notice">Compiled from the Building Control Act 1989, Building Control Regulations
+  2003, and BCA/URA/SCDF/PUB circulars including APPBCA-2018-01, APPBCA-2020-08, APPBCA-2024-20,
+  BC-2025-01 and the CORENET X series. General information for professionals — verify against
+  current circulars; your statutory duties as QP are yours. Last verified July 2026.</div>
+
+<script>
+function filterType() {
+  var t = document.getElementById('ptype').value;
+  document.querySelectorAll('#cl label').forEach(function (l) {
+    l.style.display = (t === 'all' || l.dataset.t.split(' ').indexOf(t) >= 0) ? '' : 'none';
+  });
+}
+var boxes = document.querySelectorAll('#cl input[type="checkbox"]');
+boxes.forEach(function (b, i) {
+  b.checked = localStorage.getItem('topcl-' + i) === '1';
+  b.addEventListener('change', function () {
+    localStorage.setItem('topcl-' + i, b.checked ? '1' : '0');
+  });
+});
+function resetChecks() {
+  boxes.forEach(function (b, i) { b.checked = false; localStorage.removeItem('topcl-' + i); });
+}
+</script>
+</main>
+<footer class="site">
+  <div class="inner">
+    <p>© 2026 TOP Compass Pro · <a href="../about.html">About &amp; disclosure</a> ·
+    Sponsorships in this section are flat-fee and never influence content.</p>
+  </div>
+</footer>
+</body>
+</html>
