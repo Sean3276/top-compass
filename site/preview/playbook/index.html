@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Completion Gateway Playbook — Singapore TOP/CSC, Edition 1.1 (July 2026)</title>
+<style>
+:root {
+  --ink: #16232b; --soft: #55656e; --accent: #0e5a6e; --accent-bg: #eaf3f5;
+  --line: #ccd8dd; --warn-bg: #fdf6e3; --warn-line: #e0d09a;
+  --sla: #0e5a6e; --std: #7a5d0e; --typ: #8a4a10;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink); line-height: 1.55; font-size: 10.5pt; background: #fff;
+}
+.page { max-width: 210mm; margin: 0 auto; padding: 14mm 16mm; }
+@media print {
+  @page { size: A4; margin: 14mm 13mm 16mm; }
+  .page { max-width: none; padding: 0; }
+  .no-print { display: none !important; }
+  section { page-break-before: always; }
+  section.flow-follow { page-break-before: auto; }
+  h2, h3 { page-break-after: avoid; }
+  table, .card { page-break-inside: avoid; }
+  table.long { page-break-inside: auto; }
+  table.long tr { page-break-inside: avoid; }
+  table.long thead { display: table-header-group; }
+  th, tr.hdr td, tr.overdue-risk td, .b { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .planner { border: 0; border-radius: 0; padding: 0; }
+  .note-edit { display: none; }
+  .note-print { display: inline; }
+}
+.note-print { display: none; font-size: 8.5pt; }
+.meta { font-size: 8.5pt; color: var(--soft); }
+.planner button.secondary, button.secondary {
+  background: #fff; color: var(--accent); border: 1px solid var(--accent);
+  border-radius: 4px; padding: 5pt 12pt; font-size: 10pt; font-weight: 600; cursor: pointer;
+}
+header.cover { padding: 40mm 0 20mm; border-bottom: 4px solid var(--accent); margin-bottom: 8mm; }
+header.cover .kicker { color: var(--accent); font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; font-size: 9pt; }
+header.cover h1 { font-size: 26pt; line-height: 1.15; margin: 0.3em 0 0.2em; }
+header.cover .sub { font-size: 12pt; color: var(--soft); max-width: 34em; }
+header.cover .edition { margin-top: 10mm; font-size: 9.5pt; color: var(--soft); }
+h2 { font-size: 15pt; color: var(--accent); margin: 1.6em 0 0.5em; border-bottom: 2px solid var(--line); padding-bottom: 0.2em; }
+h3 { font-size: 11.5pt; margin: 1.4em 0 0.4em; }
+p { margin: 0.5em 0; }
+.lead { font-size: 11pt; color: var(--soft); }
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: 9pt; }
+th, td { border: 1px solid var(--line); padding: 4pt 6pt; text-align: left; vertical-align: top; }
+th { background: var(--accent-bg); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; }
+.card {
+  border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 4px;
+  padding: 8pt 10pt; margin: 8pt 0; background: #fafcfc;
+}
+.card h4 { margin: 0 0 4pt; font-size: 10.5pt; }
+.card .row { font-size: 9.5pt; margin: 2pt 0; }
+.card .row b { display: inline-block; min-width: 9em; color: var(--soft); font-weight: 600; }
+.b { font-size: 7.5pt; font-weight: 700; border-radius: 3px; padding: 0.5pt 4pt; vertical-align: 1pt; white-space: nowrap; }
+.b.sla { background: #e2eff3; color: var(--sla); }
+.b.std { background: #f5eed3; color: var(--std); }
+.b.typ { background: #f7e5d2; color: var(--typ); }
+.notice { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 4px; padding: 7pt 10pt; font-size: 9.5pt; margin: 10pt 0; }
+.legend { display: flex; gap: 1.2em; flex-wrap: wrap; font-size: 9pt; margin: 8pt 0; }
+ol.flowline { list-style: none; padding: 0; counter-reset: fs; }
+ol.flowline li { position: relative; padding: 5pt 8pt 5pt 26pt; border-left: 2px solid var(--accent); margin-left: 8pt; counter-increment: fs; }
+ol.flowline li::before {
+  content: counter(fs); position: absolute; left: -11pt; top: 5pt;
+  background: var(--accent); color: #fff; border-radius: 50%; width: 18pt; height: 18pt;
+  display: flex; align-items: center; justify-content: center; font-size: 9pt; font-weight: 700;
+}
+ol.flowline b { display: block; }
+ol.flowline .sub { font-size: 9pt; color: var(--soft); }
+.planner { border: 2px solid var(--accent); border-radius: 6px; padding: 12pt; margin: 12pt 0; }
+.planner label { font-weight: 600; margin-right: 0.6em; }
+.planner input, .planner select { font-size: 10.5pt; padding: 3pt 6pt; border: 1px solid var(--line); border-radius: 4px; }
+.planner button {
+  background: var(--accent); color: #fff; border: 0; border-radius: 4px;
+  padding: 5pt 14pt; font-size: 10.5pt; font-weight: 600; cursor: pointer; margin-left: 0.6em;
+}
+td.date { white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.done-col, th.done-col { width: 3.5em; text-align: center; }
+tr.hdr td { background: var(--accent-bg); font-weight: 700; }
+tr.overdue-risk td { background: #fdf0ea; }
+footer.doc { margin-top: 14mm; border-top: 1px solid var(--line); padding-top: 4mm; font-size: 8.5pt; color: var(--soft); }
+.toc td { border: 0; border-bottom: 1px dotted var(--line); padding: 3pt 2pt; font-size: 10pt; }
+</style>
+</head>
+<body>
+<div class="no-print" style="background:#0e5a6e;color:#fff;padding:8pt 12pt;font-size:9.5pt;text-align:center">EVALUATION PREVIEW — unlisted copy for the publisher's own review. Not licensed for use or distribution. Remove before commercial launch.</div>
+<div class="page">
+
+<header class="cover">
+  <div class="kicker">TOP Compass Professional Series</div>
+  <h1>The Completion Gateway Playbook</h1>
+  <p class="sub">Planning, tracking and clearing Singapore's TOP and CSC — every agency,
+  every form, every service standard, and a working master schedule. For Qualified Persons,
+  developer project managers and submission consultants.</p>
+  <div class="edition">
+    <b>Edition 1.1 — July 2026.</b> Covers the CORENET 2 (ESPro) and CORENET X regimes as at
+    July 2026, including the 3 Jul 2026 e-form cutover and circulars through BC-2025-01.<br>
+    Licensed to the purchasing organisation for internal project use. Not for redistribution
+    or resale. The programme planner &amp; tracker is built into this document (Part 6) —
+    it works offline in your browser and your project data never leaves your machine.
+  </div>
+</header>
+
+<section class="flow-follow">
+<h2>How to use this playbook</h2>
+<p class="lead">This document does three jobs: it tells you <b>what</b> must be cleared
+(Parts 2–5), <b>when</b> to start each item (Part 1, the reference master schedule), and
+<b>how to plan and track a live project</b> (Part 6, the interactive programme &amp; tracker —
+anchor it on your target TOP or CSC date and it back-computes the whole programme, with every
+lead time adjustable and progress saved in your browser).</p>
+<p>Every duration in this playbook is labelled by its basis, because they are not equally
+trustworthy and a professional schedule should not pretend otherwise:</p>
+<div class="legend">
+  <span><span class="b sla">SLA</span> statutory or regulatory requirement</span>
+  <span><span class="b std">STD</span> agency-published service standard</span>
+  <span><span class="b typ">TYP</span> practitioner-typical planning estimate — confirm for your project</span>
+  <span><b>wd</b> = working days; <b>cd</b> = calendar days. SP Group items are quoted in "business days" mirroring SP's own wording</span>
+</div>
+<div class="notice"><b>Which regime are you in?</b> Projects submitted under CORENET 2.0
+close out via the TOP/CSC portal and ESPro e-forms (mandatory since 3 Jul 2026; Word forms
+sunset 2 Jul 2026). New projects ≥30,000 m² GFA since 1 Oct 2025 — and ALL new projects from
+1 Oct 2026 — run through CORENET X, where completion-stage technical clearances are sought
+concurrently at the Completion Gateway and the overall TOP/CSC application is filed by the
+appointed Project Coordinator. Ongoing projects onboard from 1 Oct 2027 with approvals carried
+over. The clearances themselves are the same in both regimes; the portal and sequencing
+freedom differ.</div>
+
+<h3>Contents</h3>
+<table class="toc">
+  <tr><td>Part 1 — The T-minus master schedule (reference edition, with basis labels)</td></tr>
+  <tr><td>Part 2 — Agency clearance cards (SCDF, PUB, NEA, URA, SP/MSSL, IMDA, LTA, NParks)</td></tr>
+  <tr><td>Part 3 — BCA internal sub-clearance cards (PTO, Green Mark, B-score, shelters, CONQUAS, accessibility, structural closeout)</td></tr>
+  <tr><td>Part 4 — TOP application week: booking, forms, inspection, express options</td></tr>
+  <tr><td>Part 5 — After TOP: written directions, the 2-year window, and the road to CSC</td></tr>
+  <tr><td>Part 6 — The programme &amp; tracker: backward-planned from your TOP or CSC date, durations adjustable, self-saving</td></tr>
+  <tr><td>Part 7 — Forms &amp; fees index · waivers quick reference</td></tr>
+  <tr><td>Part 8 — Project-type variations &amp; data centre supplement</td></tr>
+  <tr><td>Appendix — Verification notes, gaps &amp; change log</td></tr>
+</table>
+</section>
+
+<section>
+<h2>Part 1 — The T-minus master schedule</h2>
+<p class="lead">T0 is your BCA TOP inspection day. Offsets are calendar-day planning positions
+derived from the labelled SLAs and standards; the chain logic is explained beneath the table.
+The interactive programme &amp; tracker in Part 6 turns this into a dated schedule with every
+lead time editable.</p>
+
+<table id="msTable" class="long">
+<thead><tr><th>When</th><th>Milestone</th><th>Basis</th><th>Why then</th></tr></thead>
+<tbody>
+<tr class="hdr"><td colspan="4">Nine to six months out — the items you cannot compress</td></tr>
+<tr><td class="date">T−270</td><td>Appoint RI(A) and RI(M&amp;E); file Form FSC 8 within 14 days of appointment</td><td><span class="b sla">SLA</span></td><td>RI availability is unmanaged risk; the 14-day filing rule is SCDF's</td></tr>
+<tr><td class="date">T−270</td><td>Lift/escalator fixed-installation plan approval confirmed (Cat A: min. 15 working days, plan 3–4 weeks + resubmission rounds)</td><td><span class="b typ">TYP</span></td><td>Gates the entire lift chain: install → commission → QP-certify → PTO</td></tr>
+<tr><td class="date">T−245</td><td>Book IMDA COPIF joint inspection with telecom licensees</td><td><span class="b std">STD</span></td><td>COPIF requires telecom facilities ready/handed over no less than 6 months before TOP</td></tr>
+<tr><td class="date">T−185</td><td><b>COPIF: telecom facilities ready, joint inspection completed</b></td><td><span class="b std">STD</span></td><td>T−185 clears the ≈183-day six-month mark with margin — the earliest hard completion-stage deadline</td></tr>
+<tr><td class="date">T−160</td><td>Substation building handed over to SP PowerGrid</td><td><span class="b std">STD</span></td><td>SP requires handover 10 weeks before target energisation (here T−90)</td></tr>
+<tr><td class="date">T−150</td><td>URA planning-condition audit: every deviation identified, waiver filed or rectification planned</td><td><span class="b typ">TYP</span></td><td>Waivers are a plan-stage tool; anything found at inspection stalls TOP</td></tr>
+<tr class="hdr"><td colspan="4">Six to three months out — energise and start the clocks</td></tr>
+<tr><td class="date">T−135</td><td>Switchboard/meterboard and cable entry ready; SP service cable works begin</td><td><span class="b std">STD</span></td><td>SP standard: supply available 4–6 weeks from readiness — T−135 covers the full 6-week tail before T−90 energisation</td></tr>
+<tr><td class="date">T−110</td><td>LEW books energisation (14 business days' lead) with Certificate of Compliance</td><td><span class="b std">STD</span></td><td>SP handbook lead time; EMA electrical installation licence in place</td></tr>
+<tr><td class="date">T−100</td><td>Water service work complete; Licensed Plumber certifies within 7 days; PUB account opened, charges paid</td><td><span class="b std">STD</span></td><td>Water turn-on needs the LP certificate + account + payment — T−100 keeps the full 7-day certification window ahead of T−90</td></tr>
+<tr><td class="date">T−90</td><td><b>Permanent power energised · water turned on</b></td><td><span class="b typ">TYP</span></td><td>Everything downstream (fire T&amp;C, lifts, MSSL unit inspections) starts here</td></tr>
+<tr><td class="date">T−90→T−60</td><td>Fire protection T&amp;C (sprinkler, alarm, smoke control, integrated tests)</td><td><span class="b typ">TYP</span></td><td>Sourced component figures: sprinkler up to 1–2 weeks (complex), alarm full test 8–10 wd; the ~4-week full-suite window is a synthesis — no published SG full-suite figure exists, so confirm with your fire contractor</td></tr>
+<tr><td class="date">T−90→T−45</td><td>Lift commissioning + full acceptance tests with QP/SPE physically present (mandatory since 1 Oct 2025)</td><td><span class="b sla">SLA</span></td><td>Feeds PTO applications</td></tr>
+<tr><td class="date">T−75</td><td>Book CONQUAS/Quality Mark assessments (weekly booking cycle: Tue 08:00–Wed 23:59, one week ahead)</td><td><span class="b std">STD</span></td><td>Since 1 Jun 2025 BCA will not inspect until assessments are complete</td></tr>
+<tr><td class="date">T−65</td><td>Submit as-built Buildable Design Score / C-score</td><td><span class="b std">STD</span></td><td>BCA advises ~2 months ahead of the TOP application — anchored here to the T−5 form lodgement, not the inspection day</td></tr>
+<tr><td class="date">T−60</td><td>MSSL/SP unit electricity inspections begin (residential &gt;10 units); waterponding method statement to BCA ≥2 weeks before tests</td><td><span class="b std">STD</span></td><td>Batch by block; each turn-on booking carries ~7-business-day lead</td></tr>
+<tr class="hdr"><td colspan="4">The last two months — clearances in parallel</td></tr>
+<tr><td class="date">T−50</td><td>RI(A)/RI(M&amp;E) inspections; RI issues Form 1/Form 2 + report</td><td><span class="b typ">TYP</span></td><td>Prerequisite to the SCDF application; leave rectification headroom</td></tr>
+<tr><td class="date">T−45</td><td>Apply PUB clearances (sanitary COMPOFWORK · drainage DRATOP + handing-over · water)</td><td><span class="b std">STD</span></td><td>PUB standard: 14 working days</td></tr>
+<tr><td class="date">T−40</td><td>Apply NEA and URA technical clearances</td><td><span class="b std">STD</span></td><td>URA standard: 7 working days; NEA reported to be largely document-based — confirm scope for your project type</td></tr>
+<tr><td class="date">T−40</td><td>Book CD shelter commissioning (≥5 working days ahead); commission at T−30</td><td><span class="b std">STD</span></td><td>Failed commissioning must be re-applied for ≥14 working days before the proposed new date — buffer for one failure</td></tr>
+<tr><td class="date">T−30</td><td>Apply SCDF TFP/FSC via CORENET (response 3 wd; audit inspection normally within 10 days)</td><td><span class="b std">STD</span></td><td>Practitioner end-to-end from RI certification to TFP: 2–6 weeks</td></tr>
+<tr><td class="date">T−21</td><td>Apply lift/escalator PTOs on LEAP (7 wd processing; QP fixed-installation certification attached)</td><td><span class="b std">STD</span></td><td>Practitioner end-to-end 2–3 weeks — don't leave it inside the last fortnight</td></tr>
+<tr><td class="date">T−21</td><td>Request TOP inspection date on the portal (BCA proposes within 2 wd; confirm one week before or the request lapses)</td><td><span class="b typ">TYP</span></td><td>Practitioner-observed portal behaviour, not a published BCA standard. Site must already be in acceptable condition — premature booking is terminated</td></tr>
+<tr><td class="date">T−30→T−10</td><td>Green Mark as-built score lodged (BPD_GM02, GM e-filing)</td><td><span class="b sla">SLA</span></td><td>Statutory: before the TOP application is made</td></tr>
+<tr><td class="date">T−14</td><td><b>CONQUAS/QM assessments complete</b>; accessibility works complete; site walkthrough against the "unacceptable site conditions" list</td><td><span class="b std">STD</span></td><td>Hard gate since 1 Jun 2025</td></tr>
+<tr><td class="date">T−7</td><td>TFP and all lift PTOs in hand</td><td><span class="b typ">TYP</span></td><td>The two classic last-mile bottlenecks</td></tr>
+<tr><td class="date">T−5</td><td>Lodge Certificate of Supervision (BCA-CSC-CSPBW) + QP Declaration (ESPro e-form since 3 Jul 2026), builder's certificate, lightning/ACMV certificates</td><td><span class="b std">STD</span></td><td>Rule: not less than 3 days before inspection; whether that means working days is unresolved — T−5 guarantees ≥3 working days for any inspection weekday</td></tr>
+<tr><td class="date"><b>T0</b></td><td><b>BCA TOP inspection</b></td><td></td><td></td></tr>
+<tr><td class="date">T+10</td><td><b>TOP issued</b> (7 working days from complete application; Express TOP: 1 wd, S$500/S$1,000)</td><td><span class="b std">STD</span></td><td>Keys, 25% instalment, defects liability period begins. Practitioner-typical inspection-to-TOP runs ~4 weeks when rectification items intervene — do not commit handover dates to T+10</td></tr>
+<tr class="hdr"><td colspan="4">After TOP — the CSC clock is running</td></tr>
+<tr><td class="date">T+10→+3 mo</td><td>Comply with written directions attached to TOP (BCA/SCDF WDs: up to 60 working days; BP items 40/20 wd; ST items 14 calendar days)</td><td><span class="b std">STD</span></td><td>Breach of a WD is a s.12(6) offence — up to S$50,000 and/or 12 months</td></tr>
+<tr><td class="date">≤ TFP expiry (~T+6 mo)</td><td>Close out TFP items → Fire Safety Certificate</td><td><span class="b std">STD</span></td><td>TFP validity is typically ≤6 months; first Fire Certificate within 12 months of TOP/CSC</td></tr>
+<tr><td class="date">T+3→+18 mo</td><td>LTA street-works/parking clearance (20 wd end-to-end) · NParks greenery (7+7 wd) · survey plans (Chief Surveyor: RT 7 wd, CPST/CP 10 wd per submission) · PUB compliance certificates (within 2 years)</td><td><span class="b std">STD</span></td><td>Typical TOP-to-CSC for condos runs 12–24 months</td></tr>
+<tr><td class="date">≤ T+2 yr</td><td><b>CSC obtained</b> (application processed in 7 wd)</td><td><span class="b std">STD</span></td><td>Mandatory window for TOPs issued on/after 1 Jan 2023; final 15% instalment</td></tr>
+</tbody>
+</table>
+
+<div class="notice"><b>Reading the chain:</b> utilities gate fire and lifts; fire and lifts
+gate the inspection; CONQUAS gates whether BCA will even come. The longest arms are the ones
+with no service standard at all — RI availability, fire T&amp;C duration, and rectification
+loops — which is why this schedule holds ~2 weeks of slack in the last month. Compressing the
+plan means buying certainty on exactly those unlabelled arms, not the SLA'd ones.</div>
+
+<div class="notice"><b>To turn this reference schedule into your project's dated, adjustable
+programme, use the interactive programme &amp; tracker in Part 6</b> — enter your target TOP
+or CSC date and it back-computes every milestone; every lead time is editable and your status
+ticks save automatically in this browser.</div>
+</section>
+
+<section>
+<h2>Part 2 — Agency clearance cards</h2>
+
+<div class="card"><h4>SCDF — Temporary Fire Permit / Fire Safety Certificate</h4>
+  <div class="row"><b>Needed at</b> TOP (TFP acceptable where only very minor items outstanding; FSC by CSC)</div>
+  <div class="row"><b>Chain</b> fire systems T&amp;C → RI(A)/RI(M&amp;E) inspection → Form 1/2 + report → CORENET application</div>
+  <div class="row"><b>Standards</b> application response 3 wd <span class="b std">STD</span>; audit inspection normally within 10 days <span class="b std">STD</span>; TFP validity ≤6 months <span class="b std">STD</span>; end-to-end from RI certification 2–6 weeks <span class="b typ">TYP</span></div>
+  <div class="row"><b>Kills schedules</b> missing Certificates of Conformity for regulated fire products (fix at procurement); deviations discovered by the RI on site; purpose-group misclassification</div></div>
+
+<div class="card"><h4>PUB — three clearance streams</h4>
+  <div class="row"><b>Needed at</b> TOP (all three: sanitary/sewerage COMPOFWORK · surface drainage DRATOP + handing-over · water supply)</div>
+  <div class="row"><b>Standards</b> TOP/CSC clearance 14 wd <span class="b std">STD</span>; LP certifies water service work within 7 days of completion <span class="b std">STD</span>; compliance certificates within 2 years <span class="b std">STD</span> (anchor date — TOP vs PUB clearance — unconfirmed; verify with PUB)</div>
+  <div class="row"><b>Note</b> water turn-on gates fire-main commissioning — sequence it at T−90, not with the paperwork at T−45</div></div>
+
+<div class="card"><h4>NEA — environmental health</h4>
+  <div class="row"><b>Needed at</b> TOP · largely document/photo-based · apply ~T−40</div></div>
+
+<div class="card"><h4>URA — planning-condition compliance</h4>
+  <div class="row"><b>Needed at</b> TOP · service standard 7 wd <span class="b std">STD</span></div>
+  <div class="row"><b>Kills schedules</b> deviations from the Written Permission surfacing at completion. Audit at T−150; waivers (reported ~S$300/item — verify current DC fee schedule) are a design-stage tool — there is no waiver-at-TOP mechanism</div></div>
+
+<div class="card"><h4>SP Group / SP Services (MSSL) — power and unit inspections</h4>
+  <div class="row"><b>Standards</b> service cable 4–6 weeks from switchboard readiness <span class="b std">STD</span>; substation handover 10 weeks pre-energisation <span class="b std">STD</span>; LEW energisation booking 14 business days <span class="b std">STD</span>; unit turn-on appointments ~7 business days after account opening <span class="b std">STD</span></div>
+  <div class="row"><b>Gates</b> LEW Certificate of Compliance + Certificate of Readiness + EMA electrical installation licence + SP inspection PASS</div>
+  <div class="row"><b>Residential &gt;10 units</b> successful SP unit electrical inspections are a TOP/CSC prerequisite (APPBCA-2018-01); the completion-notice document is administered by SP — confirm the current form with SP Services. Batch inspections from T−60</div></div>
+
+<div class="card"><h4>IMDA — COPIF joint inspection</h4>
+  <div class="row"><b>Needed</b> COPIF requires telecom facilities (MDF room, lead-in pipes, risers) ready and handed over to licensees no less than 6 months before TOP <span class="b std">STD</span> — the earliest hard deadline; enforced under the Telecommunications Act, outside the TOP portal entirely. Schedule the joint inspection to meet it; note COPIF is under review (2026 consultation)</div></div>
+
+<div class="card"><h4>LTA — street works, parking, rail protection</h4>
+  <div class="row"><b>Needed at</b> CSC (not TOP) · 20 wd end-to-end including inspections <span class="b std">STD</span></div></div>
+
+<div class="card"><h4>NParks — greenery and landscape</h4>
+  <div class="row"><b>Needed at</b> CSC (not TOP) · inspection within 7 wd of confirmation, response within 7 wd <span class="b std">STD</span></div></div>
+</section>
+
+<section>
+<h2>Part 3 — BCA internal sub-clearance cards</h2>
+
+<div class="card"><h4>Lift &amp; escalator Permits to Operate (LEAP)</h4>
+  <div class="row"><b>Standards</b> PTO application 7 wd <span class="b std">STD</span>; end-to-end from commissioning 2–3 weeks <span class="b typ">TYP</span>; PTO valid 12 months, renewable from 3 months before expiry <span class="b sla">SLA</span></div>
+  <div class="row"><b>Since 1 Oct 2025</b> QP certification of fixed installations is a PTO prerequisite, and QP/SPE must be physically present for all acceptance testing <span class="b sla">SLA</span></div>
+  <div class="row"><b>Upstream</b> Cat A fixed-installation plan approval (min 15 wd, plan 3–4 weeks + resubmission rounds) gates installation itself — clear it by T−270</div></div>
+
+<div class="card"><h4>Green Mark / environmental sustainability (≥2,000 m² GFA)</h4>
+  <div class="row"><b>Statutory</b> as-built score (BPD_GM02, GM e-filing) lodged before the TOP application <span class="b sla">SLA</span></div>
+  <div class="row"><b>Certification track</b> (if pursuing a GM rating): assessment ~6 weeks, as-built verification 3–4 weeks, award ~3 weeks — 4–6 months end-to-end <span class="b typ">TYP</span>; run it parallel, not on the critical path</div></div>
+
+<div class="card"><h4>Buildability (≥5,000 m² GFA)</h4>
+  <div class="row"><b>Standard</b> as-built B-score/C-score jointly declared by architectural + structural QPs; submit ~2 months before the TOP application <span class="b std">STD</span></div></div>
+
+<div class="card"><h4>CD shelters (household/storey)</h4>
+  <div class="row"><b>Standards</b> commissioning booking ≥5 wd ahead <span class="b std">STD</span>; failed commissioning must be re-applied for ≥14 wd before the proposed new date <span class="b std">STD</span> — budget one failure loop</div></div>
+
+<div class="card"><h4>CONQUAS / Quality Mark — the inspection gate</h4>
+  <div class="row"><b>Since 1 Jun 2025</b> BCA will not proceed with the TOP/CSC inspection until assessments are complete and site conditions acceptable (APPBCA-2024-20) <span class="b std">STD</span></div>
+  <div class="row"><b>Mechanics</b> weekly booking window (Tue 08:00–Wed 23:59, one week ahead); half-day assessment blocks; cancel ≥3 wd ahead or be penalised; waterponding method statement to BCA ≥2 weeks before tests <span class="b std">STD</span></div></div>
+
+<div class="card"><h4>Accessibility / Universal Design + structural closeout</h4>
+  <div class="row"><b>Checked at</b> the TOP inspection itself; incomplete accessibility work is an "unacceptable site condition" that aborts it</div>
+  <div class="row"><b>Closeout papers</b> Certificates of Supervision, QP declaration, Builder's Certificate of Completion, lightning protection and ACMV supervision certificates, as-built structural plans</div></div>
+</section>
+
+<section>
+<h2>Part 4 — The TOP application week</h2>
+<ol class="flowline">
+  <li><b>Request the inspection (T−21).</b> BCA proposes a date within 2 working days; you must confirm no later than one week before the proposed date or the request lapses (practitioner-observed portal behaviour). <span class="b typ">TYP</span></li>
+  <li><b>Lodge the forms (T−5).</b> Certificate of Supervision of Building Works + Declaration by QP — ESPro e-forms since 3 Jul 2026 (Word forms sunset 2 Jul 2026); CORENET X projects file at the Completion Gateway. Rule: not less than 3 days before inspection; T−5 guarantees ≥3 working days on any weekday. <span class="b std">STD</span></li>
+  <li><b>Pass the site test.</b> Safe access, completed safety and accessibility works, no major liveability defects, CONQUAS done — otherwise the inspection is terminated and the booking wasted.</li>
+  <li><b>Inspection (T0), then processing.</b> TOP within 7 working days of complete documents. <span class="b std">STD</span></li>
+  <li><b>Need it faster?</b> Express TOP: 1-working-day processing, S$500 (≤3,000 m²) / S$1,000 (&gt;3,000 m²), subject to BCA acceptance and payment. Express Inspection: inspection within ~4 days, S$3,000 flat, subject to project size. Partial/phased TOP is routine — application area computed per phase. <span class="b std">STD</span></li>
+</ol>
+</section>
+
+<section>
+<h2>Part 5 — After TOP: written directions and the road to CSC</h2>
+<p>TOP is not the finish line; it is the start of a statutorily clocked closeout.</p>
+<table>
+<tr><th>Obligation</th><th>Clock</th><th>Basis</th></tr>
+<tr><td>Written directions attached to the TOP (BCA/SCDF)</td><td>Up to 60 working days to comply</td><td><span class="b std">STD</span></td></tr>
+<tr><td>BP-item written directions</td><td>40 wd (1st) / 20 wd (2nd)</td><td><span class="b std">STD</span></td></tr>
+<tr><td>ST-item written directions</td><td>14 calendar days each</td><td><span class="b std">STD</span></td></tr>
+<tr><td>TFP → Fire Safety Certificate</td><td>Within TFP validity (typically ≤6 months); first Fire Certificate within 12 months of TOP/CSC</td><td><span class="b std">STD</span></td></tr>
+<tr><td>LTA clearance (street works, parking)</td><td>20 wd end-to-end when applied</td><td><span class="b std">STD</span></td></tr>
+<tr><td>NParks clearance</td><td>7 wd inspection + 7 wd response</td><td><span class="b std">STD</span></td></tr>
+<tr><td>Survey plans (Chief Surveyor)</td><td>RT 7 wd; CPST/CP 10 wd per submission</td><td><span class="b std">STD</span></td></tr>
+<tr><td>PUB compliance certificates (drainage; sanitary)</td><td>Within 2 years</td><td><span class="b std">STD</span></td></tr>
+<tr><td><b>CSC</b> (for TOPs issued on/after 1 Jan 2023)</td><td><b>Within 2 years of TOP</b>; application processed in 7 wd</td><td><span class="b std">STD</span></td></tr>
+</table>
+<p>Breaching s.12(1) or a written direction is an offence: fine up to <b>S$50,000</b> and/or
+12 months' imprisonment, plus up to S$2,000/day as a further offence after conviction.
+Practitioner-typical TOP-to-CSC duration for condos is 12–24 months <span class="b typ">TYP</span> —
+the 2-year window leaves less slack than it appears once one WD cycle slips.</p>
+</section>
+
+<section>
+<h2>Part 6 — The programme &amp; tracker</h2>
+<p class="lead">This is the working tool. Anchor the programme on your target <b>TOP
+inspection date</b> — or on your target <b>CSC date</b>, and it derives the TOP date from an
+adjustable TOP→CSC allowance — and every milestone below dates itself backward from
+completion. Every lead time is editable (days relative to T0, negative = before); section
+headers show how long each phase spans. Status and notes save automatically in this browser
+(nothing is uploaded anywhere); use Export to move a project between machines or to back it
+up. Print for site meetings — the dated programme prints as shown.</p>
+
+<div class="planner">
+  <div class="no-print" style="display:flex;flex-wrap:wrap;gap:0.8em;align-items:center">
+    <label for="projName">Project:</label>
+    <input type="text" id="projName" placeholder="Project name" style="width:12em">
+    <label for="anchorType">Anchor:</label>
+    <select id="anchorType">
+      <option value="top">Target TOP inspection date (T0)</option>
+      <option value="csc">Target CSC date</option>
+    </select>
+    <input type="date" id="anchorDate">
+    <span id="gapWrap" hidden>
+      <label for="cscGap">TOP→CSC allowance (days):</label>
+      <input type="number" id="cscGap" value="540" min="30" max="730" style="width:5em">
+    </span>
+    <button onclick="window.print()" class="secondary">Print</button>
+  </div>
+  <div id="saveWarn" class="notice" hidden></div>
+  <div id="anchorInfo" class="meta" style="margin-top:6pt"></div>
+  <div id="prog"></div>
+  <div class="no-print" style="margin-top:8pt;display:flex;flex-wrap:wrap;gap:0.6em">
+    <button class="secondary" onclick="exportJson()">Export project (JSON)</button>
+    <button class="secondary" onclick="document.getElementById('importFile').click()">Import project</button>
+    <input type="file" id="importFile" accept=".json" hidden onchange="importJson(this)">
+    <button class="secondary" onclick="resetOffsets()">Reset lead times to defaults</button>
+    <button class="secondary" onclick="clearStatus()">Clear statuses &amp; notes</button>
+  </div>
+  <p class="meta">Offsets are calendar-day planning positions (defaults from Part 1 with their
+  SLA/STD/TYP basis). Rows highlight when their planned date is past and the item is not Done.
+  The T0 row is fixed at 0 — it is the anchor everything else is measured from. If you anchor
+  on CSC, the allowance defaults to 540 days (planned TOP→CSC duration well inside the 2-year
+  window) and stays synced with the "Target CSC application" row. The allowable-window row is
+  computed as 2 years (730 days) after the TOP-issued row, so it moves if you adjust the
+  TOP-issue lead — it is not directly editable.</p>
+</div>
+</section>
+
+<section>
+<h2>Part 7 — Forms &amp; fees index · waivers quick reference</h2>
+<h3>Key forms (post-3 Jul 2026)</h3>
+<table>
+<tr><th>Form</th><th>What</th><th>Where</th></tr>
+<tr><td>BCA-CSC-CSPBW (BPD_CSC02)</td><td>Certificate of Supervision of Building Works</td><td>ESPro e-form (CORENET 2) / CORENET X Completion Gateway</td></tr>
+<tr><td>QP Declaration for TOP/CSC (BPD_CSC07)</td><td>QP's declaration accompanying the application</td><td>ESPro e-form / CORENET X</td></tr>
+<tr><td>Builder's Certificate of Completion (BC-BC)</td><td>Builder certifies works completed per plans</td><td>With the application (e-form scope of the Jul 2026 cutover for this form: confirm on ESPro)</td></tr>
+<tr><td>BPD_GM02 + appendices</td><td>Green Mark as-built score</td><td>GM e-Filing System, before TOP application</td></tr>
+<tr><td>Form FSC 8</td><td>RI letter of appointment</td><td>To SCDF within 14 days of appointment</td></tr>
+<tr><td>RI Form 1 / Form 2 + report</td><td>RI certification (full compliance / minor safe deviations)</td><td>Prerequisite to TFP/FSC application</td></tr>
+<tr><td>PUB-BPU-COMPOFWORK · PUB-DRATOP + handing-over · LP water certificate</td><td>PUB's three streams</td><td>CORENET / CORENET X</td></tr>
+</table>
+<h3>Fees</h3>
+<table>
+<tr><th>Item</th><th>Amount</th><th>Confidence</th></tr>
+<tr><td>Standard TOP / CSC application</td><td>No published fee (only express services are priced)</td><td>Inferred — no explicit BCA statement</td></tr>
+<tr><td>Express TOP</td><td>S$500 (≤3,000 m²) / S$1,000 (&gt;3,000 m²)</td><td>Verified</td></tr>
+<tr><td>Express Inspection</td><td>S$3,000 flat, subject to project size</td><td>Verified</td></tr>
+<tr><td>SCDF fire-safety waiver (s.59 FSA)</td><td>S$160/item, payable within 4 weeks of acknowledgement; file BEFORE plan submission</td><td>Reported — verify current SCDF fee schedule</td></tr>
+<tr><td>URA written waiver</td><td>~S$300/item + GST (Table 6, DC fee schedule)</td><td>Reported — verify current schedule</td></tr>
+<tr><td>PUB COP deviation</td><td>S$950/deviation (covers resubmissions, from Apr 2025)</td><td>Reported — verify current PUB fee circular</td></tr>
+<tr><td>BCA s.6A waiver (Second Schedule)</td><td>Per Second Schedule, BC Regulations</td><td>Amount not publicly extractable — check CORENET X fee engine</td></tr>
+<tr><td>Lift PTO</td><td>Reported ~S$20/lift (schedule-based)</td><td>Practitioner-reported — verify on LEAP</td></tr>
+</table>
+<h3>Waivers in one paragraph</h3>
+<p>There is no waiver-at-TOP. Every track — BCA s.6A/reg 20 (building regulations, incl.
+accessibility, ETTV, buildability), SCDF s.59 (fire; cost alone never a ground; compensatory
+measures expected), CD shelter deviations, URA development-control waivers, PUB COP
+deviations — is designed to be exercised at or before plan approval. BCA's TOP checklist asks
+whether all waivers <i>have been</i> obtained. Anything surfacing at final inspection is
+rectified or regularised (record plans for immaterial deviations; amendment plans for material
+ones; regularisation submissions from ~S$2,500 to &gt;S$20,000 for unauthorised works, plus URA
+civil penalties), never waved through.</p>
+</section>
+
+<section>
+<h2>Part 8 — Project-type variations &amp; data centre supplement</h2>
+<table>
+<tr><th>Type</th><th>What changes vs the master schedule</th></tr>
+<tr><td>Landed (owner-occupied)</td><td>No BCA TOP inspection since Dec 2020 — QP self-certifies with checklist + shelter commissioning video; small jobs go direct to CSC. Most of Part 1 collapses</td></tr>
+<tr><td>Non-landed residential</td><td>The master schedule as printed. Add MSSL unit inspections (&gt;10 units), EC/condo phasing via partial TOP</td></tr>
+<tr><td>Commercial/retail</td><td>Master schedule minus shelters/MSSL; operating licences (SFA etc.) stack after TOP</td></tr>
+<tr><td>Industrial (JTC land)</td><td>Add JTC lessor layer: plan endorsement, TOP/FSC documents to JTC within 14 working days, building-agreement milestones; MOM WSH registration before operations</td></tr>
+<tr><td>A&amp;A to occupied buildings</td><td>No new TOP (occupation continues); permit-requiring works still end in a CSC</td></tr>
+</table>
+<p class="meta">Figures in this Part are compiled from the July 2026 TOP Compass regulatory
+study (verified and sourced there, outside this playbook's duration dataset); confirm
+CFA-condition specifics against your award documents.</p>
+<h3>Data centres — the heaviest overlay</h3>
+<p>Everything in the master schedule applies, plus: state capacity allocation before anything
+(DC-CFA award conditions: PUE ≤1.25 and Green Mark DC Platinum under CFA2; the draft Digital
+Infrastructure Bill of Jul 2026 will license all DCs); 66 kV+ grid connection with ~21–26
+months from Consumer Connection Agreement to energisation — plan the whole programme around
+this, not around BCA; EMA electrical-installation licence (&gt;45 kVA); genset licensing
+(island-mode &lt;10 MW standby sets exempt; grid-synchronised schemes are not); SCDF P&amp;FM
+diesel-storage licence (~19 wd incl. inspection); clean-agent suppression in data halls
+(Fire Code Cl. 6.5.2 relief) with the CoC chain compiled at procurement; NEA cooling-tower
+registration + Legionella testing regime; PUB Water Efficiency Management Plan (≥60,000
+m³/yr). Delivery is shell-and-core: base-build TOP (often phased), then data-hall fit-outs as
+A&amp;A cycles with their own completions. Level-5 integrated systems testing competes for the
+same commissioned-systems window as the statutory inspections — coordinate the calendars.</p>
+</section>
+
+<section>
+<h2>Appendix — Verification notes, gaps &amp; change log</h2>
+<p>Compiled July 2026 from the Building Control Act 1989 (s.6A, s.12), Building Control
+Regulations 2003 (regs 20, 42–43, schedules), Fire Safety Act 1993 (s.59), BCA circulars
+(APPBCA-2018-01, APPBCA-2020-08, APPBCA-2023-03, APPBCA-2024-20, BC-2025-01, CORENET X
+series), the IACC advisory on written directions and the TOP–CSC window, SCDF/PUB/URA/LTA/
+NParks/SLA published standards, the SP Group connection handbook, and practitioner sources
+where labelled TYP. Items a purchaser should confirm live on their project: BC-2025-01
+Annex A per-agency figures (partially extracted here), the s.6A Second Schedule fee quantum,
+lift PTO fees, the SCDF (S$160) and PUB (S$950) waiver-fee amounts and the URA ~S$300 written
+waiver fee, whether the 3-day form-lodgement rule counts working or calendar days, the anchor
+date of PUB's 2-year compliance-certificate requirement, the current COPIF requirements (under
+2026 review) and the SP unit-inspection notice form name, the full-suite fire T&amp;C duration
+(no published figure exists — the ~4-week window here is synthesized from component tests),
+and all TYP durations. The first-Fire-Certificate-within-12-months rule was verified against
+SCDF's April 2026 regime change (FC validity now 3-yearly). SP handbook lead times trace to
+editions circa 2017–2018 still in circulation — confirm current figures with your LEW at
+project start.</p>
+<p><b>Change log.</b> Edition 1 (July 2026): first release. Edition 1.1 (July 2026): the
+companion Excel tracker is replaced by the integrated in-document programme &amp; tracker
+(Part 6) — anchor on TOP or CSC, adjustable lead times, self-saving statuses/notes with
+export/import; QA corrections applied throughout. Update policy: purchasers receive revised
+editions when BCA/URA/SCDF circulars materially change the schedule, at minimum quarterly
+review.</p>
+<footer class="doc">
+  <p><b>The Completion Gateway Playbook</b> · Edition 1.1 · July 2026 · © TOP Compass.
+  Licensed to the purchasing organisation for internal project use; redistribution or resale
+  prohibited. This playbook is general professional reference material, not legal advice and
+  not a substitute for the statutory duties and judgement of the appointed Qualified Persons.
+  Durations labelled TYP are planning estimates that must be confirmed for each project.</p>
+</footer>
+</section>
+
+</div>
+<script>
+var SECTIONS = [
+  { name: "Nine to six months out — the items you cannot compress", items: [
+    { id: "ri",        off: -270, label: "Appoint RI(A)/RI(M&E); Form FSC 8 within 14 days", basis: "SLA" },
+    { id: "liftplan",  off: -270, label: "Lift fixed-installation plan approval confirmed", basis: "TYP" },
+    { id: "copifbook", off: -245, label: "Book IMDA COPIF joint inspection", basis: "STD" },
+    { id: "copif",     off: -185, label: "COPIF: telecom facilities ready, joint inspection COMPLETE (≥ 6 months pre-TOP — hard)", basis: "STD" },
+    { id: "substn",    off: -160, label: "Substation building handover to SP PowerGrid (10 wks pre-energisation)", basis: "STD" },
+    { id: "uraaudit",  off: -150, label: "URA deviation audit; waivers filed / rectification planned", basis: "TYP" }
+  ]},
+  { name: "Six to three months out — energise and start the clocks", items: [
+    { id: "switchbd",  off: -135, label: "Switchboard ready; SP service cable works begin (covers 6-week tail)", basis: "STD" },
+    { id: "lewbook",   off: -110, label: "LEW books energisation (14 business days lead; COC ready)", basis: "STD" },
+    { id: "water",     off: -100, label: "Water service work complete; LP certifies within 7 days", basis: "STD" },
+    { id: "energise",  off: -90,  label: "PERMANENT POWER ENERGISED; WATER TURNED ON", basis: "TYP" },
+    { id: "firetc",    off: -90,  label: "Fire protection T&C window opens (runs to ~T−60)", basis: "TYP" },
+    { id: "liftcomm",  off: -90,  label: "Lift commissioning + acceptance tests, QP/SPE physically present (runs to ~T−45)", basis: "SLA" },
+    { id: "conqbook",  off: -75,  label: "Book CONQUAS/QM assessments (weekly Tue–Wed window)", basis: "STD" },
+    { id: "bscore",    off: -65,  label: "Submit as-built B-score/C-score (~2 months before the T−5 application)", basis: "STD" },
+    { id: "mssl",      off: -60,  label: "MSSL unit inspections begin; waterponding method statement in", basis: "STD" }
+  ]},
+  { name: "The last two months — clearances in parallel", items: [
+    { id: "riinsp",    off: -50,  label: "RI inspections; Form 1/2 + report issued", basis: "TYP" },
+    { id: "pub",       off: -45,  label: "Apply PUB clearances (3 streams, 14 wd)", basis: "STD" },
+    { id: "neaura",    off: -40,  label: "Apply NEA + URA clearances; book CD shelter commissioning", basis: "STD" },
+    { id: "scdf",      off: -30,  label: "Apply SCDF TFP/FSC; shelters commissioned; GM as-built lodged (GM lodgement: statutory)", basis: "STD" },
+    { id: "pto",       off: -21,  label: "Apply lift PTOs on LEAP (7 wd)", basis: "STD" },
+    { id: "inspreq",   off: -21,  label: "Request TOP inspection date on the portal", basis: "TYP" },
+    { id: "conqdone",  off: -14,  label: "CONQUAS complete; accessibility complete; site-condition walkthrough", basis: "STD" },
+    { id: "tfp",       off: -7,   label: "TFP + all lift PTOs in hand", basis: "TYP" },
+    { id: "forms",     off: -5,   label: "Lodge CSPBW + QP Declaration + builder/lightning/ACMV certificates", basis: "STD" },
+    { id: "t0",        off: 0,    label: "BCA TOP INSPECTION (T0 — anchor, fixed)", basis: "", locked: true }
+  ]},
+  { name: "After TOP — the CSC clock is running", items: [
+    { id: "topgrant",  off: 10,   label: "TOP issued (7 wd processing; typical ~4 weeks if rectification intervenes)", basis: "STD" },
+    { id: "wd",        off: 90,   label: "Written-direction compliance complete (60 wd envelope; BP 40/20 wd; ST 14 calendar days)", basis: "STD" },
+    { id: "fsc",       off: 180,  label: "FSC obtained (close TFP items before TFP expiry ~6 months)", basis: "STD" },
+    { id: "cscclear",  off: 365,  label: "LTA + NParks clearances, survey plans, PUB compliance certificates in progress", basis: "STD" },
+    { id: "cscapp",    off: 540,  label: "Target CSC application (7 wd processing) — synced with the TOP→CSC allowance when anchored on CSC", basis: "STD" },
+    { id: "cscwin",    off: 740,  label: "ALLOWABLE WINDOW (IACC advisory): CSC ≤ 2 years after TOP issue — computed from the TOP-issued row", basis: "STD", computed: true }
+  ]}
+];
+
+var STORE_KEY = "cgp-tracker-v1";
+var BACKUP_KEY = "cgp-tracker-v1-backup";
+var STATUSES = ["Not started", "In progress", "Done", "Blocked", "N/A"];
+var saveFailed = false;
+
+function allItems() {
+  var out = [];
+  SECTIONS.forEach(function (s) { s.items.forEach(function (it) { out.push(it); }); });
+  return out;
+}
+function defaultState() {
+  var offsets = {};
+  allItems().forEach(function (it) { offsets[it.id] = it.off; });
+  return { projName: "", anchorType: "top", anchorDate: "", cscGap: 540,
+           offsets: offsets, status: {}, notes: {} };
+}
+function clampInt(v, lo, hi, fallback) {
+  var n = Math.trunc(Number(v));
+  if (!Number.isFinite(n)) return fallback;
+  return Math.min(hi, Math.max(lo, n));
+}
+// Build a guaranteed-valid state from any untrusted object (localStorage or import).
+function sanitize(raw) {
+  var s = defaultState();
+  if (!raw || typeof raw !== "object") return s;
+  if (typeof raw.projName === "string") s.projName = raw.projName.slice(0, 120);
+  s.anchorType = raw.anchorType === "csc" ? "csc" : "top";
+  if (typeof raw.anchorDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.anchorDate)) {
+    var p = raw.anchorDate.split("-").map(Number);
+    var d = new Date(p[0], p[1] - 1, p[2]);
+    if (!isNaN(d.getTime())) s.anchorDate = raw.anchorDate;
+  }
+  s.cscGap = clampInt(raw.cscGap, 30, 730, 540);
+  var rawOff = (raw.offsets && typeof raw.offsets === "object") ? raw.offsets : {};
+  allItems().forEach(function (it) {
+    if (it.locked || it.computed) return; // t0 stays 0; cscwin is derived
+    if (rawOff[it.id] !== undefined) {
+      s.offsets[it.id] = clampInt(rawOff[it.id], -400, 800, it.off);
+    }
+    var st = raw.status && raw.status[it.id];
+    if (typeof st === "string" && STATUSES.indexOf(st) >= 0) s.status[it.id] = st;
+    var nt = raw.notes && raw.notes[it.id];
+    if (typeof nt === "string") s.notes[it.id] = nt.slice(0, 500);
+  });
+  // status/notes are also allowed on locked/computed rows
+  ["t0", "cscwin"].forEach(function (id) {
+    var st = raw.status && raw.status[id];
+    if (typeof st === "string" && STATUSES.indexOf(st) >= 0) s.status[id] = st;
+    var nt = raw.notes && raw.notes[id];
+    if (typeof nt === "string") s.notes[id] = nt.slice(0, 500);
+  });
+  if (s.anchorType === "csc") s.offsets.cscapp = s.cscGap;
+  return s;
+}
+var state;
+try { state = sanitize(JSON.parse(localStorage.getItem(STORE_KEY) || "null")); }
+catch (e) { state = defaultState(); }
+
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    if (saveFailed) { saveFailed = false; showSaveWarn(false); }
+  } catch (e) {
+    if (!saveFailed) { saveFailed = true; showSaveWarn(true); }
+  }
+}
+function showSaveWarn(on) {
+  var w = document.getElementById("saveWarn");
+  if (!w) return;
+  w.hidden = !on;
+  if (on) w.textContent = "Warning: this browser is not persisting your changes (private " +
+    "mode or storage blocked). Your edits work for this session only — use Export before closing.";
+}
+function effOffset(it) {
+  if (it.computed) return state.offsets.topgrant + 730;
+  return state.offsets[it.id];
+}
+function t0Date() {
+  if (!state.anchorDate) return null;
+  var p = state.anchorDate.split("-").map(Number);
+  var a = new Date(p[0], p[1] - 1, p[2]);
+  if (isNaN(a.getTime())) return null;
+  if (state.anchorType === "csc") a = new Date(a.getFullYear(), a.getMonth(), a.getDate() - state.cscGap);
+  return isNaN(a.getTime()) ? null : a;
+}
+function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+function fmt(d) {
+  return d.toLocaleDateString("en-SG", { weekday: "short", day: "2-digit", month: "short", year: "numeric" });
+}
+function escAttr(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function offLabel(n) { return n === 0 ? "T0" : (n > 0 ? "T+" + n : "T−" + (-n)); }
+
+function render() {
+  document.getElementById("anchorType").value = state.anchorType;
+  document.getElementById("anchorDate").value = state.anchorDate;
+  document.getElementById("cscGap").value = state.cscGap;
+  document.getElementById("projName").value = state.projName;
+  document.getElementById("gapWrap").hidden = state.anchorType !== "csc";
+  var t0 = t0Date();
+  var info = document.getElementById("anchorInfo");
+  var proj = state.projName ? "<b>" + escAttr(state.projName) + "</b> — " : "";
+  if (!t0) {
+    info.innerHTML = proj + "Enter an anchor date to generate the dated programme. " +
+      "Lead times, statuses and notes still save.";
+  } else {
+    var wk = t0.getDay();
+    var wkWarn = (wk === 0 || wk === 6) ?
+      " <b>Note: T0 falls on a " + (wk === 0 ? "Sunday" : "Saturday") +
+      " — BCA inspections are working-day events; adjust the anchor or allowance.</b>" : "";
+    if (state.anchorType === "csc") {
+      info.innerHTML = proj + "Derived TOP inspection (T0): <b>" + fmt(t0) + "</b> = target CSC − " +
+        state.cscGap + "-day allowance. The window row checks: CSC ≤ 2 years after TOP issue." + wkWarn;
+    } else {
+      info.innerHTML = proj + "T0 = <b>" + fmt(t0) + "</b>. Planned CSC application: <b>" +
+        fmt(addDays(t0, state.offsets.cscapp)) + "</b>." + wkWarn;
+    }
+  }
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var h = "<table class=\"long\"><thead><tr><th style=\"width:6.5em\">Lead (days)</th>" +
+    "<th style=\"width:9em\">Date</th><th>Milestone</th><th style=\"width:3.5em\">Basis</th>" +
+    "<th style=\"width:8.5em\">Status</th><th style=\"width:16%\">Notes</th></tr></thead><tbody>";
+  SECTIONS.forEach(function (sec) {
+    var offs = sec.items.map(effOffset);
+    var lo = Math.min.apply(null, offs), hi = Math.max.apply(null, offs);
+    h += "<tr class=\"hdr\"><td colspan=\"6\">" + sec.name + " — spans " + (hi - lo) +
+      " days (" + offLabel(lo) + " → " + offLabel(hi) + ")</td></tr>";
+    sec.items.forEach(function (it) {
+      var off = effOffset(it);
+      var st = state.status[it.id] || "Not started";
+      var d = t0 ? addDays(t0, off) : null;
+      var overdue = d && d < today && st !== "Done" && st !== "N/A";
+      h += "<tr" + (overdue ? " class=\"overdue-risk\"" : "") + ">";
+      h += "<td>" + ((it.locked || it.computed) ? String(off) :
+        "<input type=\"number\" id=\"off-" + it.id + "\" value=\"" + off + "\" style=\"width:4.5em\" " +
+        "onchange=\"setOffset('" + it.id + "', this)\">") + "</td>";
+      h += "<td class=\"date\">" + (d ? fmt(d) : "—") + "</td>";
+      h += "<td>" + it.label + (overdue ? " — <b>past due</b>" : "") + "</td>";
+      h += "<td>" + (it.basis ? "<span class=\"b " + it.basis.toLowerCase() + "\">" + it.basis + "</span>" : "") + "</td>";
+      h += "<td><select id=\"st-" + it.id + "\" onchange=\"setStatus('" + it.id + "', this.value)\">" +
+        STATUSES.map(function (s) { return "<option" + (s === st ? " selected" : "") + ">" + s + "</option>"; }).join("") +
+        "</select></td>";
+      var noteVal = escAttr(state.notes[it.id] || "");
+      h += "<td><input type=\"text\" class=\"note-edit\" value=\"" + noteVal +
+        "\" style=\"width:100%\" onchange=\"setNote('" + it.id + "', this.value)\">" +
+        "<span class=\"note-print\">" + noteVal + "</span></td>";
+      h += "</tr>";
+    });
+  });
+  h += "</tbody></table>";
+  document.getElementById("prog").innerHTML = h;
+}
+function refocus(id) {
+  var el = document.getElementById(id);
+  if (el) { el.focus(); if (el.select) el.select(); }
+}
+function setOffset(id, el) {
+  var n = Math.trunc(Number(el.value));
+  if (!Number.isFinite(n)) { el.value = state.offsets[id]; return; }
+  n = Math.min(800, Math.max(-400, n));
+  state.offsets[id] = n;
+  if (id === "cscapp" && state.anchorType === "csc") {
+    state.cscGap = Math.min(730, Math.max(30, n));
+    state.offsets.cscapp = state.cscGap;
+  }
+  save(); render(); refocus("off-" + id);
+}
+function setStatus(id, v) { state.status[id] = v; save(); render(); refocus("st-" + id); }
+function setNote(id, v) { state.notes[id] = String(v).slice(0, 500); save(); }
+function resetOffsets() {
+  if (!confirm("Reset every lead time to the playbook defaults? Statuses and notes are kept.")) return;
+  allItems().forEach(function (it) { state.offsets[it.id] = it.off; });
+  if (state.anchorType === "csc") state.offsets.cscapp = state.cscGap;
+  save(); render();
+}
+function clearStatus() {
+  if (!confirm("Clear ALL statuses and notes for this project? This cannot be undone.")) return;
+  state.status = {}; state.notes = {}; save(); render();
+}
+function exportJson() {
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (state.projName ? state.projName.replace(/[^\w-]+/g, "-").slice(0, 40) + "-" : "") +
+    "top-programme.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importJson(input) {
+  var f = input.files && input.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () {
+    try {
+      var parsed = JSON.parse(r.result);
+      if (!parsed || typeof parsed !== "object" || typeof parsed.offsets !== "object") {
+        throw new Error("bad file");
+      }
+      if (!confirm("Replace the current project" +
+        (state.projName ? " (" + state.projName + ")" : "") +
+        " with the imported one? The current project is stashed to a backup slot.")) {
+        input.value = ""; return;
+      }
+      try { localStorage.setItem(BACKUP_KEY, JSON.stringify(state)); } catch (e) {}
+      var prev = state;
+      state = sanitize(parsed);
+      try { render(); } catch (e) { state = prev; render(); throw e; }
+      save();
+    } catch (e) { alert("Could not import: not a valid programme file."); }
+    input.value = "";
+  };
+  r.readAsText(f);
+}
+document.getElementById("anchorType").addEventListener("change", function () {
+  state.anchorType = this.value;
+  if (state.anchorType === "csc") state.offsets.cscapp = state.cscGap;
+  save(); render();
+});
+document.getElementById("anchorDate").addEventListener("change", function () {
+  state.anchorDate = /^\d{4}-\d{2}-\d{2}$/.test(this.value) ? this.value : "";
+  save(); render();
+});
+document.getElementById("cscGap").addEventListener("change", function () {
+  var v = clampInt(this.value, 30, 730, state.cscGap);
+  state.cscGap = v;
+  state.offsets.cscapp = v;
+  save(); render();
+});
+document.getElementById("projName").addEventListener("change", function () {
+  state.projName = this.value.slice(0, 120); save(); render();
+});
+try { render(); }
+catch (e) { state = defaultState(); render(); }
+</script>
+</body>
+</html>
